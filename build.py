@@ -4,7 +4,7 @@ import hashlib
 from pathlib import Path
 from urllib.parse import quote
 from viz import viz, tab_icon, CHECK
-from content import T, EMAIL, WA, BOOKING, PORTFOLIO, LINKEDIN, GITHUB, WORK, WORK_LINKS, TOOLS, SERVICE_KEYS
+from content import T, EMAIL, WA, BOOKING, PORTFOLIO, LINKEDIN, GITHUB, WORK, WORK_META, WORK_LINKS, TOOLS, SERVICE_KEYS
 
 BASE = "https://sayamrina.github.io/amrinawork/"
 ROOT = Path(__file__).parent
@@ -13,10 +13,10 @@ SHORT = {"en": "EN", "de": "DE", "id": "ID"}
 NOTAB = ' tabindex="-1"'
 
 
-def icon(name):
+def icon(name, size=22):
     svg = (ROOT / "icons" / f"{name}.svg").read_text()
     svg = re.sub(r"<title>.*?</title>", "", svg)
-    return svg.replace('role="img"', 'aria-hidden="true" fill="currentColor" width="22" height="22"')
+    return svg.replace('role="img"', f'aria-hidden="true" fill="currentColor" width="{size}" height="{size}"')
 
 
 VER = hashlib.md5((ROOT / "style.css").read_bytes() + (ROOT / "main.js").read_bytes()).hexdigest()[:8]
@@ -61,14 +61,34 @@ def page(lang):
             f'<a href="{url}" target="_blank" rel="noopener">{t["link_live"] if kind == "live" else t["link_page"]}</a>'
             for kind, url in WORK_LINKS[key])
 
-    work = "\n".join(
-        f"""<article class="case{' big' if i < 2 else ''}">
-  <a class="shot" href="{WORK_LINKS[k][0][1]}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><img src="{up}img/{k}.webp" alt="" loading="lazy"></a>
-  <p class="kind">{t['work'][k][0]}</p>
-  <h3>{t['work'][k][1]}</h3>
-  <p class="result">{t['work'][k][2]}</p>
-  <p class="case-links">{links(k)}</p>
-</article>""" for i, k in enumerate(WORK))
+    def stack(k):
+        return "".join(f'<span title="{n}">{icon(ic, 18)}<span class="sr">{n}</span></span>' for n, ic in WORK_META[k][1])
+
+    def case(i, k):
+        kind, title, result = t["work"][k]
+        big, label = t["work_metrics"][k]
+        live = WORK_LINKS[k][0][1]
+        page = next((u for kd, u in WORK_LINKS[k] if kd == "page"), None)
+        details = f'<a class="details" href="{page}" target="_blank" rel="noopener">{t["link_page"]}</a>' if page else ""
+        return f"""<article class="case{' big' if i < 2 else ''}" data-cats="{' '.join(WORK_META[k][0])}">
+  <a class="shot" href="{live}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+    <span class="shot-bar"><i></i><i></i><i></i></span>
+    <img src="{up}img/{k}.webp" alt="" loading="lazy">
+    <span class="shot-cta">{t['work_try']}</span>
+  </a>
+  <div class="case-body">
+    <p class="kind">{kind}</p>
+    <h3>{title}</h3>
+    <p class="metric"><b>{big}</b><span>{label}</span></p>
+    <div class="case-foot"><span class="stack">{stack(k)}</span><span class="case-links"><a class="try" href="{live}" target="_blank" rel="noopener">{t['work_try']}</a>{details}</span></div>
+  </div>
+</article>"""
+
+    work = "\n".join(case(i, k) for i, k in enumerate(WORK))
+    names = dict(zip(SERVICE_KEYS, (n for n, _ in t["services"])))
+    used = [k for k in SERVICE_KEYS if any(k in WORK_META[w][0] for w in WORK)]
+    filters = f'<button type="button" aria-pressed="true" data-cat="all">{t["work_all"]}</button>' + "".join(
+        f'<button type="button" aria-pressed="false" data-cat="{k}">{names[k]}</button>' for k in used)
 
     process = "\n".join(f"<li><b>{h}</b><span>{p}</span></li>" for h, p in t["process"])
     tools = "\n".join(
@@ -153,9 +173,10 @@ def page(lang):
   </div>
 </section>
 
-<section id="work" class="block block-tint">
+<section id="work" class="block block-dark">
   <div class="wrap">
     <div class="head-row"><h2>{t['work_h']}</h2><a href="{PORTFOLIO}" target="_blank" rel="noopener">{t['work_more']}</a></div>
+    <div class="filters" role="group" aria-label="{t['work_h']}">{filters}</div>
     <div class="cases">
 {work}
     </div>

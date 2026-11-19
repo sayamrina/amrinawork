@@ -78,6 +78,23 @@
     bench.addEventListener("mouseleave", function () { bench.classList.remove("paused"); });
   }
 
+  // Work filter
+  var fbtns = Array.prototype.slice.call(document.querySelectorAll(".filters button"));
+  var cases = Array.prototype.slice.call(document.querySelectorAll(".case"));
+  fbtns.forEach(function (b) {
+    b.addEventListener("click", function () {
+      var cat = b.dataset.cat;
+      fbtns.forEach(function (o) { o.setAttribute("aria-pressed", o === b); });
+      document.querySelector(".cases").classList.toggle("filtered", cat !== "all");
+      cases.forEach(function (c) {
+        var show = cat === "all" || c.dataset.cats.split(" ").indexOf(cat) > -1;
+        c.hidden = !show;
+        c.classList.remove("enter");
+        if (show) { void c.offsetWidth; c.classList.add("enter"); }
+      });
+    });
+  });
+
   // Hero chat plays once
   var chat = document.querySelector(".chat");
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

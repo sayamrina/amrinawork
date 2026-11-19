@@ -9,7 +9,18 @@ GITHUB = "https://github.com/sayamrina"
 BOOKING = "https://calendar.app.google/sSNyLLXYJH6unQuL9"
 
 # Work: (key, image). The first two are shown large.
-WORK = ["rmn", "kie", "solution", "erm", "ops", "breakfast", "wunsch", "kpa"]
+WORK = ["erm", "rmn", "ops", "kie", "solution", "breakfast", "wunsch", "kpa"]
+# Per project: service categories (for the filter) and stack icons (icons/*.svg with display name)
+WORK_META = {
+    "erm": (["chat", "learn"], [("Python", "python"), ("FastAPI", "fastapi"), ("React", "react"), ("TypeScript", "typescript"), ("OpenAI", "openai")]),
+    "rmn": (["chat", "auto"], [("Python", "python"), ("FastAPI", "fastapi"), ("React", "react"), ("SQLite", "sqlite"), ("Docker", "docker")]),
+    "ops": (["chat", "auto"], [("Python", "python"), ("FastAPI", "fastapi"), ("n8n", "n8n"), ("Jira", "jira"), ("Docker", "docker")]),
+    "kie": (["pm", "learn"], [("Python", "python"), ("Streamlit", "streamlit"), ("OpenAI", "openai")]),
+    "solution": (["pm"], [("Spring Boot", "springboot"), ("Jira", "jira"), ("Docker", "docker")]),
+    "breakfast": (["web", "chat"], [("React", "react"), ("Firebase", "firebase")]),
+    "wunsch": (["auto"], [("Python", "python"), ("Streamlit", "streamlit"), ("OpenAI", "openai")]),
+    "kpa": (["learn", "web"], [("Moodle", "moodle"), ("PostgreSQL", "postgresql"), ("Docker", "docker")]),
+}
 WORK_LINKS = {
     "rmn": [("live", "https://rmn-ai-assistent.onrender.com/"), ("page", "https://sayamrina.github.io/rmn-ai-assistent/")],
     "kie": [("live", "https://ki-einfuehrung-amrina.streamlit.app/"), ("page", "https://sayamrina.github.io/ki-einfuehrung/")],
@@ -34,6 +45,9 @@ SERVICE_KEYS = ["chat", "auto", "web", "pm", "dash", "learn"]
 T = {}
 
 T["en"] = dict(
+    work_all='All',
+    work_try='Try it',
+    work_metrics={'erm': ('6.75 / 7', 'instructor rating, ChatGPT-4o: 6.00'), 'ops': ('44 / 44', 'document fields extracted correctly'), 'solution': ('43', 'automated tests'), 'kie': ('5', 'roles with their own approvals'), 'rmn': ('6', 'tools, every answer with sources'), 'breakfast': ('3', 'languages, orders live in the kitchen'), 'wunsch': ('37', 'test cases checked by hand'), 'kpa': ('45', 'quiz questions with feedback')},
     lang_name="English",
     title="Amrina, AI engineer: assistants, automation and websites",
     description="AI assistants that answer from your own documents and show their sources, automations, project tools, dashboards and websites. Based in Saarbrücken, Germany. English, German, Indonesian.",
@@ -146,6 +160,9 @@ T["en"] = dict(
 )
 
 T["de"] = dict(
+    work_all='Alle',
+    work_try='Ausprobieren',
+    work_metrics={'erm': ('6,75 / 7', 'Bewertung durch Lehrende, ChatGPT-4o: 6,00'), 'ops': ('44 / 44', 'Dokumentfelder korrekt erkannt'), 'solution': ('43', 'automatisierte Tests'), 'kie': ('5', 'Rollen mit eigenen Freigaben'), 'rmn': ('6', 'Tools, jede Antwort mit Quellen'), 'breakfast': ('3', 'Sprachen, Bestellungen live in der Küche'), 'wunsch': ('37', 'von Hand geprüfte Testfälle'), 'kpa': ('45', 'Quizfragen mit Feedback')},
     lang_name="Deutsch",
     title="Amrina, AI Engineer: KI-Assistenten, Automatisierung und Websites",
     description="KI-Assistenten, die aus Ihren Dokumenten antworten und die Quelle zeigen, Automatisierungen, Projekt-Tools, Dashboards und Websites. Aus Saarbrücken, auf Deutsch, Englisch und Indonesisch.",
@@ -258,6 +275,9 @@ T["de"] = dict(
 )
 
 T["id"] = dict(
+    work_all='Semua',
+    work_try='Coba',
+    work_metrics={'erm': ('6,75 / 7', 'nilai dari dosen, ChatGPT-4o: 6,00'), 'ops': ('44 / 44', 'kolom dokumen terbaca benar'), 'solution': ('43', 'tes otomatis'), 'kie': ('5', 'peran dengan persetujuan sendiri'), 'rmn': ('6', 'tools, setiap jawaban dengan sumber'), 'breakfast': ('3', 'bahasa, pesanan langsung ke dapur'), 'wunsch': ('37', 'kasus uji dicek manual'), 'kpa': ('45', 'soal kuis dengan umpan balik')},
     lang_name="Bahasa Indonesia",
     title="Amrina, AI engineer: asisten AI, otomasi, dan website",
     description="Asisten AI yang menjawab dari dokumen Anda dan menunjukkan sumbernya, otomasi, aplikasi manajemen proyek, dashboard, dan website. Dari Saarbrücken, Jerman. Bahasa Indonesia, Inggris, Jerman.",
