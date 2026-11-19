@@ -6,7 +6,7 @@ PORTFOLIO = "https://sayamrina.github.io/"
 LINKEDIN = "https://www.linkedin.com/in/amrina-ali-487025119/"
 GITHUB = "https://github.com/sayamrina"
 # Paste the Google Calendar booking page link here. While empty, "Book a video call" opens WhatsApp with a prefilled request.
-BOOKING = ""
+BOOKING = "https://calendar.app.google/sSNyLLXYJH6unQuL9"
 
 # Work: (key, image). The first two are shown large.
 WORK = ["rmn", "kie", "solution", "erm", "ops", "breakfast", "wunsch", "kpa"]
