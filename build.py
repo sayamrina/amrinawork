@@ -1,17 +1,75 @@
 """Builds index.html (English), de/index.html and id/index.html from content.py."""
+import re
 from pathlib import Path
 from urllib.parse import quote
-from content import T, EMAIL, WA, PORTFOLIO, LINKEDIN, GITHUB, WORK_LINKS
+from content import T, EMAIL, WA, PORTFOLIO, LINKEDIN, GITHUB, WORK, WORK_LINKS, TOOLS, SERVICE_KEYS
 
 BASE = "https://sayamrina.github.io/amrinawork/"
 ROOT = Path(__file__).parent
 PATHS = {"en": "", "de": "de/", "id": "id/"}
-HTML_LANG = {"en": "en", "de": "de", "id": "id"}
 SHORT = {"en": "EN", "de": "DE", "id": "ID"}
+NOTAB = ' tabindex="-1"'
+CHECK = '<svg class="ck" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+
+
+def icon(name):
+    svg = (ROOT / "icons" / f"{name}.svg").read_text()
+    svg = re.sub(r"<title>.*?</title>", "", svg)
+    return svg.replace('role="img"', 'aria-hidden="true" fill="currentColor"')
+
+
+def viz(key, v, up):
+    if key == "chat":
+        return f"""<div class="vz vz-chat">
+  <div class="b b-guest">{v['chat_q']}</div>
+  <div class="b b-ai">{v['chat_a']}</div>
+  <div class="handover"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="7" r="3.2" fill="currentColor"/><path d="M3.5 17c.8-3.2 3.4-5 6.5-5s5.7 1.8 6.5 5" fill="currentColor"/></svg>{v['chat_handover']}</div>
+</div>"""
+    if key == "auto":
+        rows = "".join(f"<li><span>{k}</span><b>{val}</b>{CHECK}</li>" for k, val in v["auto_fields"])
+        return f"""<div class="vz vz-auto">
+  <div class="mail"><p class="mail-from">{v['auto_from']}</p><p>{v['auto_mail']}</p></div>
+  <svg class="flow" viewBox="0 0 60 24" aria-hidden="true"><path d="M2 12h50m-8-8 8 8-8 8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <div class="fields"><ul>{rows}</ul><p class="done">{CHECK}{v['auto_done']}</p></div>
+</div>"""
+    if key == "web":
+        return f"""<div class="vz vz-web">
+  <div class="browser"><div class="bar"><i></i><i></i><i></i><span></span></div><img src="{up}img/web.webp" alt="" width="900" height="563" loading="lazy"></div>
+  <div class="phone"><img src="{up}img/web.webp" alt="" width="900" height="563" loading="lazy"></div>
+</div>"""
+    if key == "pm":
+        c1, c2, c3 = v["pm_cards"]
+        def card(c, cls=""):
+            tag = f'<em class="p {c[1].lower()}">{c[1]}</em>' if c[1] else CHECK
+            return f'<div class="card {cls}">{tag}<span>{c[0]}</span></div>'
+        cols = v["pm_cols"]
+        return f"""<div class="vz vz-pm">
+  <div class="col"><h4>{cols[0]}</h4>{card(c2)}<div class="card ghost"></div></div>
+  <div class="col"><h4>{cols[1]}</h4>{card(c1, 'hot')}</div>
+  <div class="col"><h4>{cols[2]}</h4>{card(c3, 'done')}<div class="card ghost"></div></div>
+</div>"""
+    if key == "dash":
+        vals = [38, 44, 41, 52, 58, 55, 66, 72, 69, 80, 86, 94]
+        bars = "".join(f'<rect x="{i*25+4}" y="{100-h}" width="17" height="{h}" rx="3"/>' for i, h in enumerate(vals))
+        kpis = "".join(f"<div><b>{n}</b><span>{l}</span></div>" for l, n in v["dash_kpis"])
+        return f"""<div class="vz vz-dash">
+  <div class="kpis">{kpis}</div>
+  <p class="dash-t">{v['dash_title']}</p>
+  <svg class="bars" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true">{bars}</svg>
+</div>"""
+    if key == "learn":
+        mods = "".join(
+            f'<li><span>{n}</span><div class="track"><i style="width:{p}%"></i></div>{CHECK if p == 100 else f"<em>{p}%</em>"}</li>'
+            for n, p in v["learn_mods"])
+        return f"""<div class="vz vz-learn">
+  <ul class="mods">{mods}</ul>
+  <div class="award"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="20" r="15" fill="currentColor"/><path d="M15 32l-4 12 7-3 4 6 2-14m9-1 4 12-7-3-4 6-2-14" fill="currentColor" opacity=".55"/><path d="M24 11l2.8 5.7 6.2.9-4.5 4.4 1 6.2L24 25.3l-5.5 2.9 1-6.2-4.5-4.4 6.2-.9z" fill="#fff"/></svg><div><b>{v['learn_badge']}</b><span>{v['learn_cert']} PDF</span></div></div>
+</div>"""
 
 
 def page(lang):
     t = T[lang]
+    v = t["viz"]
     up = "" if lang == "en" else "../"
     mail = f"mailto:{EMAIL}?subject={quote(t['mail_subject'])}"
     wa = f"https://wa.me/{WA}"
@@ -19,57 +77,53 @@ def page(lang):
     def lang_href(l):
         return up + PATHS[l] if PATHS[l] else (up or "./")
 
-    alternates = "\n".join(
-        f'<link rel="alternate" hreflang="{HTML_LANG[l]}" href="{BASE}{PATHS[l]}">' for l in T
-    ) + f'\n<link rel="alternate" hreflang="x-default" href="{BASE}">'
-
-    nav = "\n".join(f'<a href="#{i}">{label}</a>' for i, label in t["nav"])
+    alternates = "\n".join(f'<link rel="alternate" hreflang="{l}" href="{BASE}{PATHS[l]}">' for l in T)
+    alternates += f'\n<link rel="alternate" hreflang="x-default" href="{BASE}">'
+    nav = "\n      ".join(f'<a href="#{i}">{label}</a>' for i, label in t["nav"])
     switch = "".join(
         f'<a href="{lang_href(l)}" data-lang="{l}" hreflang="{l}" lang="{l}"'
-        + (' aria-current="true"' if l == lang else "")
-        + f' title="{T[l]["lang_name"]}">{SHORT[l]}</a>'
-        for l in T
-    )
+        + (' aria-current="true"' if l == lang else "") + f' title="{T[l]["lang_name"]}">{SHORT[l]}</a>'
+        for l in T)
     dlg_buttons = "\n".join(
         f'<a class="dlg-lang" href="{lang_href(l)}" data-lang="{l}" lang="{l}" hreflang="{l}">'
-        f'<span class="dlg-code">{SHORT[l]}</span><span>{T[l]["lang_name"]}</span></a>'
-        for l in T
-    )
+        f'<span class="dlg-code">{SHORT[l]}</span><span>{T[l]["lang_name"]}</span></a>' for l in T)
     dlg_others = "".join(f'<p lang="{l}">{T[l]["dlg_title"]}</p>' for l in T if l != lang)
 
-    services = "\n".join(
-        f"""<li class="svc">
-  <h3>{name}</h3>
-  <div><p>{body}</p><p class="svc-ex"><span>{t['examples']}:</span> {ex}</p></div>
-</li>""" for name, body, ex in t["services"])
+    tabs = "\n".join(
+        f'<button role="tab" id="tab-{k}" aria-controls="panel-{k}" aria-selected="{"true" if i == 0 else "false"}"'
+        f'{"" if i == 0 else NOTAB}>{name}</button>'
+        for i, (k, (name, _)) in enumerate(zip(SERVICE_KEYS, t["services"])))
+    panels = "\n".join(
+        f"""<div class="panel" role="tabpanel" id="panel-{k}" aria-labelledby="tab-{k}"{"" if i == 0 else " hidden"}>
+  <p class="panel-line"><b>{name}.</b> {line}</p>
+  {viz(k, v, up)}
+  <p class="panel-cap">{v['example'] if k == 'dash' else v['illustration']}</p>
+</div>""" for i, (k, (name, line)) in enumerate(zip(SERVICE_KEYS, t["services"])))
 
     def links(key):
-        out = []
-        for kind, url in WORK_LINKS[key]:
-            label = t["link_live"] if kind == "live" else t["link_page"]
-            out.append(f'<a href="{url}" target="_blank" rel="noopener">{label}</a>')
-        return " ".join(out)
+        return " ".join(
+            f'<a href="{url}" target="_blank" rel="noopener">{t["link_live"] if kind == "live" else t["link_page"]}</a>'
+            for kind, url in WORK_LINKS[key])
 
     work = "\n".join(
-        f"""<article class="case">
-  <p class="case-kind">{kind}</p>
-  <h3>{title}</h3>
-  <dl>
-    <dt>{t['lbl_problem']}</dt><dd>{prob}</dd>
-    <dt>{t['lbl_solution']}</dt><dd>{sol}</dd>
-    <dt>{t['lbl_result']}</dt><dd class="case-result">{res}</dd>
-  </dl>
-  <p class="case-links">{links(key)}</p>
-</article>""" for key, kind, title, prob, sol, res in t["work"])
+        f"""<article class="case{' big' if i < 2 else ''}">
+  <a class="shot" href="{WORK_LINKS[k][0][1]}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><img src="{up}img/{k}.webp" alt="" loading="lazy"></a>
+  <p class="kind">{t['work'][k][0]}</p>
+  <h3>{t['work'][k][1]}</h3>
+  <p class="result">{t['work'][k][2]}</p>
+  <p class="case-links">{links(k)}</p>
+</article>""" for i, k in enumerate(WORK))
 
-    process = "\n".join(f"<li><h3>{h}</h3><p>{p}</p></li>" for h, p in t["process"])
-    about = "\n".join(f"<p>{p}</p>" for p in t["about"])
-    tools = "\n".join(f"<div><dt>{g}</dt><dd>{items}</dd></div>" for g, items in t["tools"])
-    faq = "\n".join(
-        f"<details><summary>{q}</summary><p>{a}</p></details>" for q, a in t["faq"])
+    process = "\n".join(f"<li><b>{h}</b><span>{p}</span></li>" for h, p in t["process"])
+    tools = "\n".join(
+        f"""<div class="tg"><h3>{g}</h3><ul>{''.join(
+            f'<li>{icon(ic) if ic else f"<span class=letter aria-hidden=true>{name[0]}</span>"}{name}</li>' for name, ic in items)}</ul></div>"""
+        for g, items in zip(t["tools_groups"], TOOLS))
+    facts = "".join(f"<div><dt>{a}</dt><dd>{b}</dd></div>" for a, b in t["facts"])
+    faq = "\n".join(f"<details><summary>{q}</summary><p>{a}</p></details>" for q, a in t["faq"])
 
     return f"""<!doctype html>
-<html lang="{HTML_LANG[lang]}">
+<html lang="{lang}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -81,6 +135,7 @@ def page(lang):
 <meta property="og:description" content="{t['description']}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="{BASE}{PATHS[lang]}">
+<meta property="og:image" content="{BASE}img/amrina.webp">
 <meta name="theme-color" content="#f4f6f7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0f1519" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="{up}favicon.svg" type="image/svg+xml">
@@ -111,6 +166,7 @@ def page(lang):
       <h1>{t['hero_h1']}</h1>
       <p class="lede">{t['hero_lede']}</p>
       <p class="actions"><a class="btn" href="#contact">{t['cta_primary']}</a> <a class="btn btn-line" href="{wa}" target="_blank" rel="noopener">{t['cta_wa']}</a></p>
+      <p class="me"><img src="{up}img/amrina.webp" alt="Amrina" width="44" height="44">{t['hero_me']}</p>
     </div>
     <figure class="chat" aria-label="{t['chat_label']}">
       <figcaption>{t['chat_label']}</figcaption>
@@ -118,33 +174,36 @@ def page(lang):
       <div class="typing" aria-hidden="true"><i></i><i></i><i></i></div>
       <div class="msg msg-ai">{t['chat_answer']}</div>
       <div class="source" id="src1"><span class="source-n">1</span><div><span class="source-t">{t['chat_source_title']}</span>{t['chat_source']}</div></div>
-      <p class="chat-note">{t['chat_note']}</p>
     </figure>
   </div>
 </section>
 
 <section id="services" class="block">
   <div class="wrap">
-    <div class="head"><h2>{t['services_h']}</h2><p>{t['services_intro']}</p></div>
-    <ul class="svcs">
-{services}
-    </ul>
+    <h2>{t['services_h']}</h2>
+    <div class="bench">
+      <div class="tabs" role="tablist" aria-label="{t['services_h']}">
+{tabs}
+      </div>
+      <div class="stage">
+{panels}
+      </div>
+    </div>
   </div>
 </section>
 
 <section id="work" class="block block-tint">
   <div class="wrap">
-    <div class="head"><h2>{t['work_h']}</h2><p>{t['work_intro']}</p></div>
+    <div class="head-row"><h2>{t['work_h']}</h2><a href="{PORTFOLIO}" target="_blank" rel="noopener">{t['work_more']}</a></div>
     <div class="cases">
 {work}
     </div>
-    <p class="more">{t['work_more']} <a href="{PORTFOLIO}" target="_blank" rel="noopener">{t['work_more_link']}</a></p>
   </div>
 </section>
 
 <section id="process" class="block">
   <div class="wrap">
-    <div class="head"><h2>{t['process_h']}</h2></div>
+    <h2>{t['process_h']}</h2>
     <ol class="steps">
 {process}
     </ol>
@@ -153,19 +212,21 @@ def page(lang):
 
 <section id="tools" class="block block-tint">
   <div class="wrap">
-    <div class="head"><h2>{t['tools_h']}</h2><p>{t['tools_intro']}</p></div>
-    <dl class="tools">
+    <h2>{t['tools_h']}</h2>
+    <div class="tools">
 {tools}
-    </dl>
+    </div>
   </div>
 </section>
 
 <section id="about" class="block">
   <div class="wrap about">
-    <h2>{t['about_h']}</h2>
+    <img class="portrait" src="{up}img/amrina.webp" alt="Amrina" width="360" height="360" loading="lazy">
     <div>
-{about}
-      <p class="about-links"><span>{t['about_links']}:</span> <a href="{PORTFOLIO}" target="_blank" rel="noopener">sayamrina.github.io</a> <a href="{LINKEDIN}" target="_blank" rel="noopener">LinkedIn</a> <a href="{GITHUB}" target="_blank" rel="noopener">GitHub</a></p>
+      <h2>{t['about_h']}</h2>
+      <p>{t['about']}</p>
+      <dl class="facts">{facts}</dl>
+      <p class="about-links"><a href="{PORTFOLIO}" target="_blank" rel="noopener">{t['footer_portfolio']}</a> <a href="{LINKEDIN}" target="_blank" rel="noopener">LinkedIn</a> <a href="{GITHUB}" target="_blank" rel="noopener">GitHub</a></p>
     </div>
   </div>
 </section>
@@ -180,11 +241,13 @@ def page(lang):
 </section>
 
 <section id="contact" class="contact">
-  <div class="wrap">
-    <h2>{t['contact_h']}</h2>
-    <p>{t['contact_p']}</p>
-    <p class="actions"><a class="btn btn-invert" href="{mail}">{t['contact_mail']}</a> <a class="btn btn-line-invert" href="{wa}" target="_blank" rel="noopener">{t['contact_wa']}</a></p>
-    <p class="contact-direct"><a href="{mail}">{EMAIL}</a></p>
+  <div class="wrap contact-in">
+    <div>
+      <h2>{t['contact_h']}</h2>
+      <p>{t['contact_p']}</p>
+      <p class="actions"><a class="btn btn-invert" href="{mail}">{t['contact_mail']}</a> <a class="btn btn-line-invert" href="{wa}" target="_blank" rel="noopener">{t['contact_wa']}</a></p>
+      <p class="contact-direct"><a href="{mail}">{EMAIL}</a></p>
+    </div>
   </div>
 </section>
 </main>

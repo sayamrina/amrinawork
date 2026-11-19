@@ -20,6 +20,27 @@
     a.addEventListener("click", function () { store(a.dataset.lang); });
   });
 
+  // Services tabs (ARIA tabs pattern)
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  function select(tab) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute("aria-selected", on);
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+    });
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener("click", function () { select(t); t.scrollIntoView({ block: "nearest", inline: "nearest" }); });
+    t.addEventListener("keydown", function (e) {
+      var j = e.key === "ArrowDown" || e.key === "ArrowRight" ? i + 1 : e.key === "ArrowUp" || e.key === "ArrowLeft" ? i - 1 : null;
+      if (j === null) return;
+      e.preventDefault();
+      var next = tabs[(j + tabs.length) % tabs.length];
+      select(next); next.focus();
+    });
+  });
+
   // Hero chat plays once
   var chat = document.querySelector(".chat");
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
