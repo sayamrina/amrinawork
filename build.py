@@ -3,6 +3,7 @@ import re
 import hashlib
 from pathlib import Path
 from urllib.parse import quote
+from viz import viz, tab_icon, CHECK
 from content import T, EMAIL, WA, BOOKING, PORTFOLIO, LINKEDIN, GITHUB, WORK, WORK_LINKS, TOOLS, SERVICE_KEYS
 
 BASE = "https://sayamrina.github.io/amrinawork/"
@@ -10,62 +11,12 @@ ROOT = Path(__file__).parent
 PATHS = {"en": "", "de": "de/", "id": "id/"}
 SHORT = {"en": "EN", "de": "DE", "id": "ID"}
 NOTAB = ' tabindex="-1"'
-CHECK = '<svg class="ck" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 
 
 def icon(name):
     svg = (ROOT / "icons" / f"{name}.svg").read_text()
     svg = re.sub(r"<title>.*?</title>", "", svg)
     return svg.replace('role="img"', 'aria-hidden="true" fill="currentColor" width="22" height="22"')
-
-
-def viz(key, v, up):
-    if key == "chat":
-        return f"""<div class="vz vz-chat">
-  <div class="b b-guest">{v['chat_q']}</div>
-  <div class="b b-ai">{v['chat_a']}</div>
-  <div class="handover"><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="7" r="3.2" fill="currentColor"/><path d="M3.5 17c.8-3.2 3.4-5 6.5-5s5.7 1.8 6.5 5" fill="currentColor"/></svg>{v['chat_handover']}</div>
-</div>"""
-    if key == "auto":
-        rows = "".join(f"<li><span>{k}</span><b>{val}</b>{CHECK}</li>" for k, val in v["auto_fields"])
-        return f"""<div class="vz vz-auto">
-  <div class="mail"><p class="mail-from">{v['auto_from']}</p><p>{v['auto_mail']}</p></div>
-  <svg class="flow" width="54" height="54" viewBox="0 0 60 24" aria-hidden="true"><path d="M2 12h50m-8-8 8 8-8 8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  <div class="fields"><ul>{rows}</ul><p class="done">{CHECK}{v['auto_done']}</p></div>
-</div>"""
-    if key == "web":
-        return f"""<div class="vz vz-web">
-  <div class="browser"><div class="bar"><i></i><i></i><i></i><span></span></div><img src="{up}img/web.webp" alt="" width="900" height="563" loading="lazy"></div>
-  <div class="phone"><img src="{up}img/web.webp" alt="" width="900" height="563" loading="lazy"></div>
-</div>"""
-    if key == "pm":
-        c1, c2, c3 = v["pm_cards"]
-        def card(c, cls=""):
-            tag = f'<em class="p {c[1].lower()}">{c[1]}</em>' if c[1] else CHECK
-            return f'<div class="card {cls}">{tag}<span>{c[0]}</span></div>'
-        cols = v["pm_cols"]
-        return f"""<div class="vz vz-pm">
-  <div class="col"><h4>{cols[0]}</h4>{card(c2)}<div class="card ghost"></div></div>
-  <div class="col"><h4>{cols[1]}</h4>{card(c1, 'hot')}</div>
-  <div class="col"><h4>{cols[2]}</h4>{card(c3, 'done')}<div class="card ghost"></div></div>
-</div>"""
-    if key == "dash":
-        vals = [38, 44, 41, 52, 58, 55, 66, 72, 69, 80, 86, 94]
-        bars = "".join(f'<rect x="{i*25+4}" y="{100-h}" width="17" height="{h}" rx="3"/>' for i, h in enumerate(vals))
-        kpis = "".join(f"<div><b>{n}</b><span>{l}</span></div>" for l, n in v["dash_kpis"])
-        return f"""<div class="vz vz-dash">
-  <div class="kpis">{kpis}</div>
-  <p class="dash-t">{v['dash_title']}</p>
-  <svg class="bars" width="300" height="140" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true">{bars}</svg>
-</div>"""
-    if key == "learn":
-        mods = "".join(
-            f'<li><span>{n}</span><div class="track"><i style="width:{p}%"></i></div>{CHECK if p == 100 else f"<em>{p}%</em>"}</li>'
-            for n, p in v["learn_mods"])
-        return f"""<div class="vz vz-learn">
-  <ul class="mods">{mods}</ul>
-  <div class="award"><svg width="64" height="64" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="20" r="15" fill="currentColor"/><path d="M15 32l-4 12 7-3 4 6 2-14m9-1 4 12-7-3-4 6-2-14" fill="currentColor" opacity=".55"/><path d="M24 11l2.8 5.7 6.2.9-4.5 4.4 1 6.2L24 25.3l-5.5 2.9 1-6.2-4.5-4.4 6.2-.9z" fill="#fff"/></svg><div><b>{v['learn_badge']}</b><span>{v['learn_cert']} PDF</span></div></div>
-</div>"""
 
 
 VER = hashlib.md5((ROOT / "style.css").read_bytes() + (ROOT / "main.js").read_bytes()).hexdigest()[:8]
@@ -96,10 +47,10 @@ def page(lang):
 
     tabs = "\n".join(
         f'<button role="tab" id="tab-{k}" aria-controls="panel-{k}" aria-selected="{"true" if i == 0 else "false"}"'
-        f'{"" if i == 0 else NOTAB}>{name}</button>'
+        f'{"" if i == 0 else NOTAB}>{tab_icon(k)}<span>{name}</span><i class="prog" aria-hidden="true"></i></button>'
         for i, (k, (name, _)) in enumerate(zip(SERVICE_KEYS, t["services"])))
     panels = "\n".join(
-        f"""<div class="panel" role="tabpanel" id="panel-{k}" aria-labelledby="tab-{k}"{"" if i == 0 else " hidden"}>
+        f"""<div class="panel{" run" if i == 0 else ""}" role="tabpanel" id="panel-{k}" aria-labelledby="tab-{k}"{"" if i == 0 else " hidden"}>
   <p class="panel-line"><b>{name}.</b> {line}</p>
   {viz(k, v, up)}
   <p class="panel-cap">{v['example'] if k == 'dash' else v['illustration']}</p>

@@ -20,26 +20,63 @@
     a.addEventListener("click", function () { store(a.dataset.lang); });
   });
 
-  // Services tabs (ARIA tabs pattern)
+  // Services tabs (ARIA tabs pattern) with autoplay and replayed mock-up animations
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var bench = document.querySelector(".bench");
   var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
-  function select(tab) {
-    tabs.forEach(function (t) {
-      var on = t === tab;
-      t.setAttribute("aria-selected", on);
-      t.tabIndex = on ? 0 : -1;
-      document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+  function countUp(panel) {
+    panel.querySelectorAll(".count").forEach(function (el) {
+      var target = el.dataset.to, m = target.match(/-?\d+/);
+      if (!m || reduceMotion) { el.textContent = target; return; }
+      var end = parseInt(m[0], 10), t0 = null;
+      function step(ts) {
+        if (!t0) t0 = ts;
+        var k = Math.min(1, (ts - t0) / 1200), val = Math.round(end * (1 - Math.pow(1 - k, 3)));
+        el.textContent = target.replace(m[0], val);
+        if (k < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
     });
   }
+  function select(tab, byUser) {
+    tabs.forEach(function (t) {
+      var on = t === tab, panel = document.getElementById(t.getAttribute("aria-controls"));
+      t.setAttribute("aria-selected", on);
+      t.tabIndex = on ? 0 : -1;
+      panel.hidden = !on;
+      panel.classList.remove("run");
+      if (on) { void panel.offsetWidth; panel.classList.add("run"); countUp(panel); }
+    });
+    if (byUser && bench) { bench.classList.remove("auto"); bench.dataset.touched = "1"; }
+  }
   tabs.forEach(function (t, i) {
-    t.addEventListener("click", function () { select(t); t.scrollIntoView({ block: "nearest", inline: "nearest" }); });
+    t.addEventListener("click", function () { select(t, true); t.scrollIntoView({ block: "nearest", inline: "nearest" }); });
     t.addEventListener("keydown", function (e) {
       var j = e.key === "ArrowDown" || e.key === "ArrowRight" ? i + 1 : e.key === "ArrowUp" || e.key === "ArrowLeft" ? i - 1 : null;
       if (j === null) return;
       e.preventDefault();
       var next = tabs[(j + tabs.length) % tabs.length];
-      select(next); next.focus();
+      select(next, true); next.focus();
+    });
+    t.querySelector(".prog").addEventListener("animationend", function () {
+      if (!bench.classList.contains("auto")) return;
+      select(tabs[(i + 1) % tabs.length], false);
     });
   });
+  if (bench && !reduceMotion && "IntersectionObserver" in window) {
+    var started = false;
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting && !started) {
+          started = true;
+          if (!bench.dataset.touched) { bench.classList.add("auto"); select(tabs[0], false); }
+        }
+        bench.classList.toggle("paused", !en.isIntersecting);
+      });
+    }, { threshold: 0.35 }).observe(bench);
+    bench.addEventListener("mouseenter", function () { bench.classList.add("paused"); });
+    bench.addEventListener("mouseleave", function () { bench.classList.remove("paused"); });
+  }
 
   // Hero chat plays once
   var chat = document.querySelector(".chat");
