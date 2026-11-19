@@ -87,8 +87,8 @@ p { margin: 0 0 1rem; }
 /* Hero */
 .hero { padding: clamp(3rem, 7vw, 6rem) 0; overflow: hidden; }
 .hero-in { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
-.hero h1 { font-size: clamp(2.5rem, 5.6vw, 4.6rem); font-weight: 750; letter-spacing: -.035em; max-width: 14ch; }
-.lede { font-size: clamp(1.1rem, 1.6vw, 1.3rem); color: var(--muted); max-width: 40ch; margin: 1.4rem 0 2rem; }
+.hero h1 { font-size: clamp(2.4rem, 5vw, 4.2rem); font-weight: 750; letter-spacing: -.035em; max-width: 17ch; }
+.lede { font-size: clamp(1.1rem, 1.6vw, 1.3rem); color: var(--muted); max-width: 46ch; margin: 1.4rem 0 2rem; }
 .me { display: flex; align-items: center; gap: .75rem; margin: 2rem 0 0; color: var(--muted); font-size: .95rem; }
 .me img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--surface); box-shadow: 0 0 0 1px var(--line); }
 
