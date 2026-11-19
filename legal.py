@@ -24,7 +24,7 @@ def impressum(email):
 <h2>Haftung für Inhalte und Links</h2>
 <p>Die Inhalte dieser Website wurden mit Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität kann ich jedoch keine Gewähr übernehmen. Diese Website enthält Links zu externen Websites, auf deren Inhalte ich keinen Einfluss habe; für diese Inhalte ist der jeweilige Anbieter verantwortlich. Werden mir Rechtsverletzungen bekannt, entferne ich die betreffenden Links umgehend.</p>
 <h2>Hinweis zu den Projekten</h2>
-<p>Projekte, die auf dieser Website als „Project lab“, „Demo“ oder „Projekt aus der Masterarbeit“ gekennzeichnet sind, sind keine Kundenaufträge.</p>"""
+<p>Die auf dieser Website gezeigten Projekte sind eigene Projekte, Demos oder Projekte aus meiner Masterarbeit und keine Kundenaufträge, sofern nicht ausdrücklich anders angegeben.</p>"""
 
 
 def datenschutz(email):
