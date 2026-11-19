@@ -166,6 +166,11 @@ def page(lang):
     <div class="hero-copy">
       <h1>{t['hero_h1']}</h1>
       <p class="lede">{t['hero_lede']}</p>
+      <div class="hero-links" role="group" aria-label="{t['hero_links']}">
+        <a class="pill-link" href="{PORTFOLIO}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2" fill="currentColor"/></svg>{t['footer_portfolio']}</a>
+        <a class="pill-link" href="{LINKEDIN}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="4" fill="currentColor"/><path d="M7 10v7M7 7v.01M11 17v-7m0 3.2c0-1.9 1.2-3.2 2.9-3.2 1.6 0 2.6 1.1 2.6 3.1V17" fill="none" stroke="var(--paper)" stroke-width="2.2" stroke-linecap="round"/></svg>LinkedIn</a>
+      </div>
+      <p class="lets">{t['lets_talk']}</p>
       <p class="actions"><a class="btn" href="{book}" target="_blank" rel="noopener">{t['cta_primary']}</a> <a class="btn btn-line" href="{wa}" target="_blank" rel="noopener">{t['cta_wa']}</a></p>
       <p class="me"><img src="{up}img/amrina.webp" alt="Amrina" width="44" height="44">{t['hero_me']}</p>
     </div>

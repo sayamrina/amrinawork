@@ -318,3 +318,10 @@ p { margin: 0 0 1rem; }
 .opt-main { background: var(--deep-ink); color: var(--deep); border-color: var(--deep-ink); }
 .opt-main span { color: #4a5a72; }
 @media (max-width: 760px) { .options { grid-template-columns: minmax(0, 1fr); } .opt { flex-direction: row; flex-wrap: wrap; align-items: center; column-gap: .8rem; } .opt svg { margin: 0; width: 26px; height: 26px; } .opt span { flex-basis: 100%; } }
+
+/* Hero: work links, then the invitation */
+.hero-links { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 2rem; }
+.pill-link { display: inline-flex; align-items: center; gap: .55rem; min-height: 44px; padding: .5rem 1rem; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); color: var(--ink); text-decoration: none; font-weight: 600; transition: border-color .15s; }
+.pill-link:hover { border-color: var(--signal); color: var(--signal); }
+.pill-link svg { width: 20px; height: 20px; }
+.lets { font: 650 1.35rem/1.2 var(--display); letter-spacing: -.01em; margin: 0 0 .9rem; padding-top: 1.6rem; border-top: 1px solid var(--line); max-width: 30rem; }
