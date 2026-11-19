@@ -3,6 +3,8 @@
 X = {}
 
 X["en"] = dict(
+    legal_imp='Legal notice',
+    legal_priv='Privacy',
     nav_offers="Offers",
     adopt_h="Built to be used, not just installed",
     adopt_p="As an AI engineer and educational technology specialist, I also make sure your team learns the new tool and keeps using it.",
@@ -27,7 +29,7 @@ X["en"] = dict(
     offers_h="Ways to start",
     offers=[
         ("check", "Free", "Free website check", "Send me your website address. You get a short report: your site next to a modern version, with speed, mobile view and broken links.", "Request a check", "Hi Amrina, I'd like a free website check for: "),
-        ("pilot", "Fixed price", "AI assistant pilot", "About two weeks on your own documents. Your team tests it, then you decide whether to continue.", "Book a call", ""),
+        ("pilot", "Fixed price", "AI assistant pilot", "Two to three weeks on your own documents. Your team tests it, then you decide whether to continue.", "Book a call", ""),
         ("care", "Monthly", "Care plan", "Updates, fixes, small improvements and refresher training after launch.", "Ask about it", "Hi Amrina, I'd like to know more about the care plan."),
     ],
     asst_btn="Ask my assistant",
@@ -46,6 +48,8 @@ X["en"] = dict(
 )
 
 X["de"] = dict(
+    legal_imp='Impressum',
+    legal_priv='Datenschutz',
     nav_offers="Angebote",
     adopt_h="Gebaut, um genutzt zu werden",
     adopt_p="Als AI Engineer und Spezialist für Bildungstechnologie sorge ich auch dafür, dass Ihr Team das neue Werkzeug lernt und dabei bleibt.",
@@ -70,7 +74,7 @@ X["de"] = dict(
     offers_h="So können wir starten",
     offers=[
         ("check", "Kostenlos", "Kostenloser Website-Check", "Schicken Sie mir Ihre Website-Adresse. Sie bekommen einen kurzen Bericht: Ihre Seite neben einer modernen Version, mit Ladezeit, Mobilansicht und defekten Links.", "Check anfragen", "Hallo Amrina, ich möchte einen kostenlosen Website-Check für: "),
-        ("pilot", "Festpreis", "Pilotprojekt KI-Assistent", "Etwa zwei Wochen mit Ihren eigenen Dokumenten. Ihr Team testet, dann entscheiden Sie, ob es weitergeht.", "Gespräch buchen", ""),
+        ("pilot", "Festpreis", "Pilotprojekt KI-Assistent", "Zwei bis drei Wochen mit Ihren eigenen Dokumenten. Ihr Team testet, dann entscheiden Sie, ob es weitergeht.", "Gespräch buchen", ""),
         ("care", "Monatlich", "Betreuung", "Updates, Fehlerbehebung, kleine Verbesserungen und Auffrischungsschulungen nach dem Start.", "Mehr erfahren", "Hallo Amrina, ich möchte mehr über die Betreuung erfahren."),
     ],
     asst_btn="Meinen Assistenten fragen",
@@ -89,6 +93,8 @@ X["de"] = dict(
 )
 
 X["id"] = dict(
+    legal_imp='Impressum',
+    legal_priv='Kebijakan privasi',
     nav_offers="Penawaran",
     adopt_h="Dibuat untuk dipakai, bukan sekadar dipasang",
     adopt_p="Sebagai AI engineer dan educational technology specialist, saya juga memastikan tim Anda bisa memakai alat barunya dan terus memakainya.",
@@ -113,7 +119,7 @@ X["id"] = dict(
     offers_h="Cara memulai",
     offers=[
         ("check", "Gratis", "Cek website gratis", "Kirim alamat website Anda. Anda mendapat laporan singkat: website Anda berdampingan dengan versi modern, plus kecepatan, tampilan HP, dan link yang rusak.", "Minta cek", "Halo Amrina, saya ingin cek website gratis untuk: "),
-        ("pilot", "Harga tetap", "Pilot asisten AI", "Sekitar dua minggu dengan dokumen Anda sendiri. Tim Anda mencobanya, lalu Anda putuskan mau lanjut atau tidak.", "Jadwalkan call", ""),
+        ("pilot", "Harga tetap", "Pilot asisten AI", "Dua sampai tiga minggu dengan dokumen Anda sendiri. Tim Anda mencobanya, lalu Anda putuskan mau lanjut atau tidak.", "Jadwalkan call", ""),
         ("care", "Bulanan", "Paket pendampingan", "Update, perbaikan, peningkatan kecil, dan pelatihan ulang setelah peluncuran.", "Tanya detailnya", "Halo Amrina, saya ingin tahu lebih lanjut soal paket pendampingan."),
     ],
     asst_btn="Tanya asisten saya",
@@ -142,7 +148,7 @@ KB_WORDS = {
     "process": "start begin steps process how work together workflow timeline ablauf schritte anfangen beginnen zusammenarbeit mulai langkah alur proses kerja sama",
     "adopt": "training train team use adoption onboarding learn staff schulung schulen team nutzen lernen mitarbeiter pelatihan latih tim pakai belajar karyawan staf",
     "offer-check": "website check audit free review analysis kostenlos prüfung gratis cek periksa",
-    "offer-pilot": "pilot trial test try demo two weeks probe testen pilotprojekt uji coba percobaan dua minggu",
+    "offer-pilot": "pilot trial test try demo weeks probe testen pilotprojekt wochen uji coba percobaan minggu",
     "offer-care": "maintenance support care monthly update fix wartung betreuung support monatlich pemeliharaan pendampingan bulanan perbaikan",
     "svc-chat": "chatbot chat assistant bot whatsapp questions answers hotel restaurant guests assistent fragen gäste asisten tamu pertanyaan jawab",
     "svc-auto": "automation automate email emails forms pdf invoice data workflow automatisierung automatisieren rechnung formular otomasi otomatis faktur formulir",

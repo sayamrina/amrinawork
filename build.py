@@ -6,6 +6,7 @@ from pathlib import Path
 from urllib.parse import quote
 from viz import viz, tab_icon, CHECK
 from content_extra import X, KB_WORDS
+import legal
 from content import T, EMAIL, WA, BOOKING, PORTFOLIO, LINKEDIN, GITHUB, WORK, WORK_META, WORK_LINKS, TOOLS, SERVICE_KEYS
 
 BASE = "https://sayamrina.github.io/amrinawork/"
@@ -166,9 +167,7 @@ def page(lang):
 <meta name="theme-color" content="#f4f6f7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0f1519" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="{up}favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,650;12..96,750&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{up}fonts.css?v={VER}">
 <link rel="stylesheet" href="{up}style.css?v={VER}">
 </head>
 <body data-lang="{lang}">
@@ -330,7 +329,7 @@ def page(lang):
 <footer class="foot">
   <div class="wrap foot-in">
     <p>© 2026 {t['footer']}</p>
-    <p><a href="{PORTFOLIO}" target="_blank" rel="noopener">{t['footer_portfolio']}</a> <a href="{LINKEDIN}" target="_blank" rel="noopener">LinkedIn</a></p>
+    <p><a href="{up}impressum.html">{t['legal_imp']}</a> <a href="{up}datenschutz.html">{t['legal_priv']}</a> <a href="{PORTFOLIO}" target="_blank" rel="noopener">{t['footer_portfolio']}</a> <a href="{LINKEDIN}" target="_blank" rel="noopener">LinkedIn</a></p>
   </div>
 </footer>
 
@@ -364,3 +363,8 @@ for lang in T:
     out.parent.mkdir(exist_ok=True)
     out.write_text(page(lang), encoding="utf-8")
     print("wrote", out.relative_to(ROOT))
+
+mark = (ROOT / "logo" / "mark.svg").read_text().strip().replace("<svg ", '<svg class="mark" aria-hidden="true" width="38" height="38" ', 1)
+for fname, title, body in [("impressum.html", "Impressum", legal.impressum(EMAIL)), ("datenschutz.html", "Datenschutzerklärung", legal.datenschutz(EMAIL))]:
+    (ROOT / fname).write_text(legal.page(title, body, "./").replace("{MARK}", mark), encoding="utf-8")
+    print("wrote", fname)
