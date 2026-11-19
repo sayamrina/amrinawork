@@ -21,7 +21,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,650;12..96,750&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=7d4af248">
+<link rel="stylesheet" href="style.css?v=7a59fa6c">
 </head>
 <body data-lang="en">
 <a class="skip" href="#main">Skip to content</a>
@@ -33,6 +33,7 @@
     <nav id="nav" class="nav" aria-label="Main">
       <a href="#services">Services</a>
       <a href="#work">Work</a>
+      <a href="#offers">Offers</a>
       <a href="#process">Process</a>
       <a href="#about">About</a>
     </nav>
@@ -160,6 +161,25 @@
   </div>
 </section>
 
+<section id="adopt" class="block block-tint">
+  <div class="wrap adopt">
+    <div>
+      <h2>Built to be used, not just installed</h2>
+      <p class="adopt-p">As an AI engineer and educational technology specialist, I also make sure your team learns the new tool and keeps using it.</p>
+      <ol class="adopt-steps"><li><b>Build</b><span>On your data and the tools you already use</span></li><li><b>Train</b><span>Short guides, hands-on sessions, quick quizzes</span></li><li><b>Adopt</b><span>Usage checked after launch, gaps fixed</span></li></ol>
+    </div>
+    <figure class="curve-card"><svg class="curve" viewBox="0 0 400 240" width="400" height="240" role="img" aria-label="With training / Without training">
+  <defs><linearGradient id="cg-en" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="currentColor" stop-opacity=".22"/><stop offset="1" stop-color="currentColor" stop-opacity="0"/></linearGradient></defs>
+  <path class="grid" d="M20 210H390M20 150H390M20 90H390M20 30H390"/>
+  <path class="with-fill" d="M20 205 C 90 200, 120 150, 170 120 S 280 50, 390 38 V210 H20Z" fill="url(#cg-en)"/>
+  <path class="without" d="M20 205 C 90 200, 120 150, 170 128 S 260 150, 390 168"/>
+  <path class="with" d="M20 205 C 90 200, 120 150, 170 120 S 280 50, 390 38"/>
+  <g class="marks"><circle cx="70" cy="200" r="7"/><circle cx="170" cy="120" r="7"/><circle cx="300" cy="58" r="7"/></g>
+  <text x="388" y="190" text-anchor="end" class="lbl-without">Without training</text><text x="388" y="22" text-anchor="end" class="lbl-with">With training</text>
+</svg><figcaption>Illustration</figcaption></figure>
+  </div>
+</section>
+
 <section id="work" class="block block-dark">
   <div class="wrap">
     <div class="head-row"><h2>Selected work</h2><a href="https://sayamrina.github.io/" target="_blank" rel="noopener">More in my portfolio</a></div>
@@ -273,6 +293,33 @@
   </div>
 </section>
 
+<section id="savings" class="block">
+  <div class="wrap calc">
+    <div class="calc-in">
+      <h2>How much time could you save?</h2>
+      <p class="calc-p">Move the sliders to your own numbers.</p>
+      <div class="field"><label for="c-q">Repeated questions or tasks per day</label><output id="o-q" for="c-q">20</output><input id="c-q" type="range" min="5" max="200" step="5" value="20"></div>
+      <div class="field"><label for="c-m">Minutes for each one</label><output id="o-m" for="c-m">4</output><input id="c-m" type="range" min="1" max="30" step="1" value="4"></div>
+      <div class="field"><label for="c-s">Share an assistant or automation could take over</label><output id="o-s" for="c-s">50%</output><input id="c-s" type="range" min="10" max="90" step="5" value="50"></div>
+      <div class="field"><label for="c-c">Cost of one working hour</label><output id="o-c" for="c-c">€ 30</output><input id="c-c" type="range" min="10" max="120" step="5" value="30" data-cur="€"></div>
+    </div>
+    <div class="calc-out" aria-live="polite">
+      <p class="big"><b id="r-h">0</b><span>hours saved per month</span></p>
+      <p class="big money"><b id="r-v">0</b><span>saved per month</span></p>
+      <div class="hourbar" aria-hidden="true"><i id="r-bar"></i></div>
+      <p class="calc-note">Estimate from your inputs and 22 working days. The real share is measured in the pilot.</p>
+      <a class="btn btn-invert" href="https://calendar.app.google/sSNyLLXYJH6unQuL9" target="_blank" rel="noopener">Check this in a pilot</a>
+    </div>
+  </div>
+</section>
+
+<section id="offers" class="block block-tint">
+  <div class="wrap">
+    <h2>Ways to start</h2>
+    <div class="offers"><article class="offer offer-check"><p class="tag">Free</p><h3>Free website check</h3><p>Send me your website address. You get a short report: your site next to a modern version, with speed, mobile view and broken links.</p><a class="btn btn-line" href="https://wa.me/4915129529331?text=Hi%20Amrina%2C%20I%27d%20like%20a%20free%20website%20check%20for%3A%20" target="_blank" rel="noopener">Request a check</a></article><article class="offer offer-pilot"><p class="tag">Fixed price</p><h3>AI assistant pilot</h3><p>About two weeks on your own documents. Your team tests it, then you decide whether to continue.</p><a class="btn" href="https://calendar.app.google/sSNyLLXYJH6unQuL9" target="_blank" rel="noopener">Book a call</a></article><article class="offer offer-care"><p class="tag">Monthly</p><h3>Care plan</h3><p>Updates, fixes, small improvements and refresher training after launch.</p><a class="btn btn-line" href="https://wa.me/4915129529331?text=Hi%20Amrina%2C%20I%27d%20like%20to%20know%20more%20about%20the%20care%20plan." target="_blank" rel="noopener">Ask about it</a></article></div>
+  </div>
+</section>
+
 <section id="process" class="block">
   <div class="wrap">
     <h2>How we work</h2>
@@ -345,6 +392,16 @@
   </div>
 </footer>
 
+<button class="asst-btn" type="button" aria-expanded="false" aria-controls="asst"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-5 4v-4H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M8 10h8M8 13h5"/></svg><span>Ask my assistant</span></button>
+<section id="asst" class="asst" role="dialog" aria-modal="false" aria-labelledby="asst-title" hidden>
+  <header class="asst-head"><span class="asst-av" aria-hidden="true"><svg width="30" height="30" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><rect x="1" y="1" width="46" height="46" rx="13" fill="#2546d8"/><path d="M8.5 36.5L16.5 11.5 24 31 31.5 11.5 39.5 36.5" fill="none" stroke="#fff" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.6 28h7.4" stroke="#fff" stroke-width="4.2" stroke-linecap="round"/></svg></span><div><h2 id="asst-title">Amrina's assistant</h2><p>Demo: answers come only from this page.</p></div><button type="button" class="asst-x" aria-label="Close">×</button></header>
+  <div class="asst-log" aria-live="polite"><div class="m m-ai">Hi! I answer questions about Amrina's services, only from the information on this page. What would you like to know?</div></div>
+  <div class="asst-chips"><button type="button" class="chip">What does it cost?</button><button type="button" class="chip">Is our data safe?</button><button type="button" class="chip">How do we start?</button></div>
+  <form class="asst-form"><label class="sr" for="asst-in">Type your question</label><input id="asst-in" type="text" autocomplete="off" placeholder="Type your question" maxlength="200"><button type="submit">Send</button></form>
+</section>
+<script type="application/json" id="kb">[{"id": "greet", "q": "", "a": "Hi! I answer questions about Amrina's services, only from the information on this page. What would you like to know?", "src": "", "href": "", "k": "hi hello hey hallo halo hai guten tag selamat pagi siang sore malam assalamualaikum"}, {"id": "svc-chat", "q": "AI assistants", "a": "AI assistants: Answers from your documents, shows the source, and hands over to your team when it is not sure.", "src": "What I build", "href": "#services", "k": "chatbot chat assistant bot whatsapp questions answers hotel restaurant guests assistent fragen gäste asisten tamu pertanyaan jawab"}, {"id": "svc-auto", "q": "AI automation", "a": "AI automation: E-mails, forms and PDFs become checked data and reply drafts.", "src": "What I build", "href": "#services", "k": "automation automate email emails forms pdf invoice data workflow automatisierung automatisieren rechnung formular otomasi otomatis faktur formulir"}, {"id": "svc-web", "q": "Websites", "a": "Websites: Fast, mobile-first sites and redesigns that keep your brand and your Google ranking.", "src": "What I build", "href": "#services", "k": "website websites web site redesign homepage seite webseite situs landing"}, {"id": "svc-pm", "q": "Project tools", "a": "Project tools: Tickets, approvals and task boards with roles, connected to Jira, Trello or Teams.", "src": "What I build", "href": "#services", "k": "project management tickets ticket approval board tasks jira trello teams projektmanagement aufgaben freigabe tiket persetujuan tugas proyek"}, {"id": "svc-dash", "q": "Dashboards", "a": "Dashboards: Your numbers in one clear view, updated automatically.", "src": "What I build", "href": "#services", "k": "dashboard dashboards reports reporting kpi numbers analytics chart berichte kennzahlen laporan angka grafik"}, {"id": "svc-learn", "q": "E-learning", "a": "E-learning: Moodle platforms, interactive courses and AI tutors.", "src": "What I build", "href": "#services", "k": "elearning e-learning learning course courses moodle lms tutor school training kurs lernen schule kursus belajar sekolah"}, {"id": "offer-check", "q": "Free website check", "a": "Free website check (Free): Send me your website address. You get a short report: your site next to a modern version, with speed, mobile view and broken links.", "src": "Ways to start", "href": "#offers", "k": "website check audit free review analysis kostenlos prüfung gratis cek periksa"}, {"id": "offer-pilot", "q": "AI assistant pilot", "a": "AI assistant pilot (Fixed price): About two weeks on your own documents. Your team tests it, then you decide whether to continue.", "src": "Ways to start", "href": "#offers", "k": "pilot trial test try demo two weeks probe testen pilotprojekt uji coba percobaan dua minggu"}, {"id": "offer-care", "q": "Care plan", "a": "Care plan (Monthly): Updates, fixes, small improvements and refresher training after launch.", "src": "Ways to start", "href": "#offers", "k": "maintenance support care monthly update fix wartung betreuung support monatlich pemeliharaan pendampingan bulanan perbaikan"}, {"id": "faq-0", "q": "What does a project cost?", "a": "A fixed price for the agreed scope, after a short call. Monthly costs such as hosting and AI usage are listed in the proposal.", "src": "Questions: What does a project cost?", "href": "#faq", "k": "price prices cost costs pay budget expensive cheap how much quote offer preis preise kosten kostet budget teuer angebot harga biaya bayar mahal murah berapa tarif penawaran"}, {"id": "faq-1", "q": "Is our data safe?", "a": "Data can stay on EU servers, personal data is removed before any AI call, and a self-hosted model is possible.", "src": "Questions: Is our data safe?", "href": "#faq", "k": "data privacy gdpr secure safe security server confidential dsgvo datenschutz sicher sicherheit vertraulich aman keamanan privasi rahasia"}, {"id": "faq-2", "q": "What if the assistant is wrong?", "a": "It answers only from your approved documents and shows the source. If nothing matches, it hands over to a person.", "src": "Questions: What if the assistant is wrong?", "href": "#faq", "k": "wrong mistake error hallucinate hallucination make up invent falsch fehler halluzination erfinden salah keliru ngarang halusinasi"}, {"id": "faq-3", "q": "Will a new website hurt our Google ranking?", "a": "No. Old addresses are kept or redirected and Search Console is checked after launch.", "src": "Questions: Will a new website hurt our Google ranking?", "href": "#faq", "k": "google ranking seo search redesign relaunch suchmaschine peringkat pencarian"}, {"id": "faq-4", "q": "Who owns the result?", "a": "You do: code, content and accounts are handed over.", "src": "Questions: Who owns the result?", "href": "#faq", "k": "own owns owner ownership code rights eigentum gehört rechte pemilik milik hak"}, {"id": "process", "q": "How we work", "a": "1. Free call: 30 minutes about your problem. 2. Proposal: Scope, timeline, fixed price. 3. Demo: Try it with your own data. 4. Launch: Setup, training, handover.", "src": "How we work", "href": "#process", "k": "start begin steps process how work together workflow timeline ablauf schritte anfangen beginnen zusammenarbeit mulai langkah alur proses kerja sama"}, {"id": "adopt", "q": "Built to be used, not just installed", "a": "As an AI engineer and educational technology specialist, I also make sure your team learns the new tool and keeps using it. Build: On your data and the tools you already use. Train: Short guides, hands-on sessions, quick quizzes. Adopt: Usage checked after launch, gaps fixed.", "src": "Built to be used, not just installed", "href": "#adopt", "k": "training train team use adoption onboarding learn staff schulung schulen team nutzen lernen mitarbeiter pelatihan latih tim pakai belajar karyawan staf"}, {"id": "about", "q": "About me", "a": "I'm Amrina, an AI engineer in Saarbrücken. I've worked where education and technology meet for ten years, and since 2024 I build AI assistants, automations and websites for clients.", "src": "About me", "href": "#about", "k": "who amrina background experience education degree master university saarland wer erfahrung studium siapa pengalaman pendidikan kuliah"}, {"id": "lang", "q": "3 languages", "a": "3 languages: English, German, Indonesian.", "src": "About me", "href": "#about", "k": "language languages speak english german indonesian sprache sprachen deutsch englisch indonesisch bahasa inggris jerman indonesia"}, {"id": "location", "q": "", "a": "You work directly with me, from Saarbrücken, Germany.", "src": "About me", "href": "#about", "k": "where location based germany saarbrücken remote country wo standort deutschland dimana lokasi jerman"}, {"id": "contact", "q": "Tell me about your project", "a": "Book a video call, WhatsApp, E-mail. Choose what suits you. I reply within one working day.", "src": "Tell me about your project", "href": "#contact", "k": "contact reach call meeting appointment book booking whatsapp email phone kontakt termin buchen anrufen hubungi kontak telepon jadwal booking"}, {"id": "calc", "q": "How much time could you save?", "a": "How much time could you save? Move the sliders to your own numbers. Estimate from your inputs and 22 working days. The real share is measured in the pilot.", "src": "How much time could you save?", "href": "#savings", "k": "save saving savings time hours roi worth benefit sparen ersparnis zeit stunden nutzen hemat penghematan waktu jam untung"}]</script>
+<script type="application/json" id="asst-cfg">{"none": "I can't find this on this page, so I won't guess. Shall I pass your question to Amrina?", "src": "Source", "wa": "Ask on WhatsApp", "book": "Book a call", "waHref": "https://wa.me/4915129529331?text=", "waText": "Hi Amrina, I have a question: ", "bookHref": "https://calendar.app.google/sSNyLLXYJH6unQuL9"}</script>
+
 <dialog id="lang-dialog" class="dlg" aria-labelledby="dlg-title">
   <h2 id="dlg-title">Choose your language to continue</h2>
   <div class="dlg-others"><p lang="de">Bitte wählen Sie Ihre Sprache</p><p lang="id">Pilih bahasa Anda untuk melanjutkan</p></div>
@@ -356,6 +413,6 @@
   <p class="dlg-note">You can change it any time at the top of the page.</p>
 </dialog>
 
-<script src="main.js?v=7d4af248"></script>
+<script src="main.js?v=7a59fa6c"></script>
 </body>
 </html>

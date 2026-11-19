@@ -1,9 +1,11 @@
 """Builds index.html (English), de/index.html and id/index.html from content.py."""
 import re
+import json
 import hashlib
 from pathlib import Path
 from urllib.parse import quote
 from viz import viz, tab_icon, CHECK
+from content_extra import X, KB_WORDS
 from content import T, EMAIL, WA, BOOKING, PORTFOLIO, LINKEDIN, GITHUB, WORK, WORK_META, WORK_LINKS, TOOLS, SERVICE_KEYS
 
 BASE = "https://sayamrina.github.io/amrinawork/"
@@ -23,7 +25,7 @@ VER = hashlib.md5((ROOT / "style.css").read_bytes() + (ROOT / "main.js").read_by
 
 
 def page(lang):
-    t = T[lang]
+    t = dict(T[lang], **X[lang])
     v = t["viz"]
     up = "" if lang == "en" else "../"
     mail = f"mailto:{EMAIL}?subject={quote(t['mail_subject'])}"
@@ -35,7 +37,9 @@ def page(lang):
 
     alternates = "\n".join(f'<link rel="alternate" hreflang="{l}" href="{BASE}{PATHS[l]}">' for l in T)
     alternates += f'\n<link rel="alternate" hreflang="x-default" href="{BASE}">'
-    nav = "\n      ".join(f'<a href="#{i}">{label}</a>' for i, label in t["nav"])
+    navitems = list(t["nav"])
+    navitems.insert(2, ("offers", t["nav_offers"]))
+    nav = "\n      ".join(f'<a href="#{i}">{label}</a>' for i, label in navitems)
     switch = "".join(
         f'<a href="{lang_href(l)}" data-lang="{l}" hreflang="{l}" lang="{l}"'
         + (' aria-current="true"' if l == lang else "") + f' title="{T[l]["lang_name"]}">{SHORT[l]}</a>'
@@ -89,6 +93,53 @@ def page(lang):
     used = [k for k in SERVICE_KEYS if any(k in WORK_META[w][0] for w in WORK)]
     filters = f'<button type="button" aria-pressed="true" data-cat="all">{t["work_all"]}</button>' + "".join(
         f'<button type="button" aria-pressed="false" data-cat="{k}">{names[k]}</button>' for k in used)
+
+
+    # --- adoption section
+    adopt_steps = "".join(f"<li><b>{h}</b><span>{p}</span></li>" for h, p in t["adopt_steps"])
+    wo, wi = t["adopt_curve"]
+    adopt_svg = f"""<svg class="curve" viewBox="0 0 400 240" width="400" height="240" role="img" aria-label="{wi} / {wo}">
+  <defs><linearGradient id="cg-{lang}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="currentColor" stop-opacity=".22"/><stop offset="1" stop-color="currentColor" stop-opacity="0"/></linearGradient></defs>
+  <path class="grid" d="M20 210H390M20 150H390M20 90H390M20 30H390"/>
+  <path class="with-fill" d="M20 205 C 90 200, 120 150, 170 120 S 280 50, 390 38 V210 H20Z" fill="url(#cg-{lang})"/>
+  <path class="without" d="M20 205 C 90 200, 120 150, 170 128 S 260 150, 390 168"/>
+  <path class="with" d="M20 205 C 90 200, 120 150, 170 120 S 280 50, 390 38"/>
+  <g class="marks"><circle cx="70" cy="200" r="7"/><circle cx="170" cy="120" r="7"/><circle cx="300" cy="58" r="7"/></g>
+  <text x="388" y="190" text-anchor="end" class="lbl-without">{wo}</text><text x="388" y="22" text-anchor="end" class="lbl-with">{wi}</text>
+</svg>"""
+
+    # --- savings calculator
+    cur = t["currency"]
+
+    # --- offers
+    def offer_href(key, wa_text):
+        return book if key == "pilot" else f"https://wa.me/{WA}?text={quote(wa_text)}"
+    offers = "".join(
+        f"""<article class="offer offer-{key}"><p class="tag">{tag}</p><h3>{title}</h3><p>{desc}</p><a class="btn{' btn-line' if key != 'pilot' else ''}" href="{offer_href(key, wa_text)}" target="_blank" rel="noopener">{cta}</a></article>"""
+        for key, tag, title, desc, cta, wa_text in t["offers"])
+
+    # --- knowledge base for the on-page assistant
+    kb = [dict(id="greet", q="", a=t["asst_hello"], src="", href="")]
+    for k, (name, line) in zip(SERVICE_KEYS, t["services"]):
+        kb.append(dict(id=f"svc-{k}", q=name, a=f"{name}: {line}", src=t["services_h"], href="#services"))
+    for key, tag, title, desc, cta, wa_text in t["offers"]:
+        kb.append(dict(id=f"offer-{key}", q=title, a=f"{title} ({tag}): {desc}", src=t["offers_h"], href="#offers"))
+    for i, (q, a) in enumerate(t["faq"]):
+        kb.append(dict(id=f"faq-{i}", q=q, a=a, src=f"{t['faq_h']}: {q}", href="#faq"))
+    kb.append(dict(id="process", q=t["process_h"], a=" ".join(f"{i}. {h}: {p}." for i, (h, p) in enumerate(t["process"], 1)), src=t["process_h"], href="#process"))
+    kb.append(dict(id="adopt", q=t["adopt_h"], a=t["adopt_p"] + " " + " ".join(f"{h}: {p}." for h, p in t["adopt_steps"]), src=t["adopt_h"], href="#adopt"))
+    kb.append(dict(id="about", q=t["about_h"], a=t["about"], src=t["about_h"], href="#about"))
+    kb.append(dict(id="lang", q=t["facts"][2][0], a=f"{t['facts'][2][0]}: {t['facts'][2][1]}.", src=t["about_h"], href="#about"))
+    kb.append(dict(id="location", q="", a=t["hero_me"], src=t["about_h"], href="#about"))
+    kb.append(dict(id="contact", q=t["contact_h"], a=f"{t['opt_call'][0]}, {t['opt_wa'][0]}, {t['opt_mail'][0]}. {t['contact_p']}", src=t["contact_h"], href="#contact"))
+    kb.append(dict(id="calc", q=t["calc_h"], a=f"{t['calc_h']} {t['calc_p']} {t['calc_note']}", src=t["calc_h"], href="#savings"))
+    for e in kb:
+        e["k"] = KB_WORDS.get(e["id"], "")
+    kb_json = json.dumps(kb, ensure_ascii=False).replace("</", "<\\/")
+    asst_cfg = json.dumps(dict(none=t["asst_none"], src=t["asst_src"], wa=t["asst_wa"], book=t["asst_book"],
+                               waHref=f"https://wa.me/{WA}?text=", waText=t["asst_wa_text"], bookHref=book), ensure_ascii=False).replace("</", "<\\/")
+    mark_small = open(ROOT / 'logo' / 'mark.svg').read().strip().replace('<svg ', '<svg width="30" height="30" ', 1)
+    chips = "".join(f'<button type="button" class="chip">{c}</button>' for c in t["asst_chips"])
 
     process = "\n".join(f"<li><b>{h}</b><span>{p}</span></li>" for h, p in t["process"])
     tools = "\n".join(
@@ -173,6 +224,17 @@ def page(lang):
   </div>
 </section>
 
+<section id="adopt" class="block block-tint">
+  <div class="wrap adopt">
+    <div>
+      <h2>{t['adopt_h']}</h2>
+      <p class="adopt-p">{t['adopt_p']}</p>
+      <ol class="adopt-steps">{adopt_steps}</ol>
+    </div>
+    <figure class="curve-card">{adopt_svg}<figcaption>{t['viz']['illustration']}</figcaption></figure>
+  </div>
+</section>
+
 <section id="work" class="block block-dark">
   <div class="wrap">
     <div class="head-row"><h2>{t['work_h']}</h2><a href="{PORTFOLIO}" target="_blank" rel="noopener">{t['work_more']}</a></div>
@@ -180,6 +242,33 @@ def page(lang):
     <div class="cases">
 {work}
     </div>
+  </div>
+</section>
+
+<section id="savings" class="block">
+  <div class="wrap calc">
+    <div class="calc-in">
+      <h2>{t['calc_h']}</h2>
+      <p class="calc-p">{t['calc_p']}</p>
+      <div class="field"><label for="c-q">{t['calc_q']}</label><output id="o-q" for="c-q">20</output><input id="c-q" type="range" min="5" max="200" step="5" value="20"></div>
+      <div class="field"><label for="c-m">{t['calc_min']}</label><output id="o-m" for="c-m">4</output><input id="c-m" type="range" min="1" max="30" step="1" value="4"></div>
+      <div class="field"><label for="c-s">{t['calc_share']}</label><output id="o-s" for="c-s">50%</output><input id="c-s" type="range" min="10" max="90" step="5" value="50"></div>
+      <div class="field"><label for="c-c">{t['calc_cost']}</label><output id="o-c" for="c-c">{cur} {t['cost_default']}</output><input id="c-c" type="range" min="{t['cost_min']}" max="{t['cost_max']}" step="{t['cost_step']}" value="{t['cost_default']}" data-cur="{cur}"></div>
+    </div>
+    <div class="calc-out" aria-live="polite">
+      <p class="big"><b id="r-h">0</b><span>{t['calc_hours']}</span></p>
+      <p class="big money"><b id="r-v">0</b><span>{t['calc_money']}</span></p>
+      <div class="hourbar" aria-hidden="true"><i id="r-bar"></i></div>
+      <p class="calc-note">{t['calc_note']}</p>
+      <a class="btn btn-invert" href="{book}" target="_blank" rel="noopener">{t['calc_cta']}</a>
+    </div>
+  </div>
+</section>
+
+<section id="offers" class="block block-tint">
+  <div class="wrap">
+    <h2>{t['offers_h']}</h2>
+    <div class="offers">{offers}</div>
   </div>
 </section>
 
@@ -244,6 +333,16 @@ def page(lang):
     <p><a href="{PORTFOLIO}" target="_blank" rel="noopener">{t['footer_portfolio']}</a> <a href="{LINKEDIN}" target="_blank" rel="noopener">LinkedIn</a></p>
   </div>
 </footer>
+
+<button class="asst-btn" type="button" aria-expanded="false" aria-controls="asst"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-5 4v-4H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M8 10h8M8 13h5"/></svg><span>{t['asst_btn']}</span></button>
+<section id="asst" class="asst" role="dialog" aria-modal="false" aria-labelledby="asst-title" hidden>
+  <header class="asst-head"><span class="asst-av" aria-hidden="true">{mark_small}</span><div><h2 id="asst-title">{t['asst_title']}</h2><p>{t['asst_note']}</p></div><button type="button" class="asst-x" aria-label="{t['asst_close']}">×</button></header>
+  <div class="asst-log" aria-live="polite"><div class="m m-ai">{t['asst_hello']}</div></div>
+  <div class="asst-chips">{chips}</div>
+  <form class="asst-form"><label class="sr" for="asst-in">{t['asst_ph']}</label><input id="asst-in" type="text" autocomplete="off" placeholder="{t['asst_ph']}" maxlength="200"><button type="submit">{t['asst_send']}</button></form>
+</section>
+<script type="application/json" id="kb">{kb_json}</script>
+<script type="application/json" id="asst-cfg">{asst_cfg}</script>
 
 <dialog id="lang-dialog" class="dlg" aria-labelledby="dlg-title">
   <h2 id="dlg-title">{t['dlg_title']}</h2>
