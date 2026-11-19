@@ -2,7 +2,7 @@
 import re
 from pathlib import Path
 from urllib.parse import quote
-from content import T, EMAIL, WA, PORTFOLIO, LINKEDIN, GITHUB, WORK, WORK_LINKS, TOOLS, SERVICE_KEYS
+from content import T, EMAIL, WA, BOOKING, PORTFOLIO, LINKEDIN, GITHUB, WORK, WORK_LINKS, TOOLS, SERVICE_KEYS
 
 BASE = "https://sayamrina.github.io/amrinawork/"
 ROOT = Path(__file__).parent
@@ -72,7 +72,8 @@ def page(lang):
     v = t["viz"]
     up = "" if lang == "en" else "../"
     mail = f"mailto:{EMAIL}?subject={quote(t['mail_subject'])}"
-    wa = f"https://wa.me/{WA}"
+    wa = f"https://wa.me/{WA}?text={quote(t['wa_hello'])}"
+    book = BOOKING or f"https://wa.me/{WA}?text={quote(t['wa_book'])}"
 
     def lang_href(l):
         return up + PATHS[l] if PATHS[l] else (up or "./")
@@ -165,7 +166,7 @@ def page(lang):
     <div class="hero-copy">
       <h1>{t['hero_h1']}</h1>
       <p class="lede">{t['hero_lede']}</p>
-      <p class="actions"><a class="btn" href="#contact">{t['cta_primary']}</a> <a class="btn btn-line" href="{wa}" target="_blank" rel="noopener">{t['cta_wa']}</a></p>
+      <p class="actions"><a class="btn" href="{book}" target="_blank" rel="noopener">{t['cta_primary']}</a> <a class="btn btn-line" href="{wa}" target="_blank" rel="noopener">{t['cta_wa']}</a></p>
       <p class="me"><img src="{up}img/amrina.webp" alt="Amrina" width="44" height="44">{t['hero_me']}</p>
     </div>
     <figure class="chat" aria-label="{t['chat_label']}">
@@ -245,7 +246,11 @@ def page(lang):
     <div>
       <h2>{t['contact_h']}</h2>
       <p>{t['contact_p']}</p>
-      <p class="actions"><a class="btn btn-invert" href="{mail}">{t['contact_mail']}</a> <a class="btn btn-line-invert" href="{wa}" target="_blank" rel="noopener">{t['contact_wa']}</a></p>
+      <div class="options">
+        <a class="opt opt-main" href="{book}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6" width="13" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 10.5l6-3.5v10l-6-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><b>{t['opt_call'][0]}</b><span>{t['opt_call'][1]}</span></a>
+        <a class="opt" href="{wa}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.1.1.7-.1 1.3Z" fill="currentColor"/></svg><b>{t['opt_wa'][0]}</b><span>{t['opt_wa'][1]}</span></a>
+        <a class="opt" href="{mail}"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 7l8.5 6 8.5-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><b>{t['opt_mail'][0]}</b><span>{t['opt_mail'][1]}</span></a>
+      </div>
       <p class="contact-direct"><a href="{mail}">{EMAIL}</a></p>
     </div>
   </div>

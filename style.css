@@ -308,3 +308,14 @@ p { margin: 0 0 1rem; }
   .facts dt { font-size: 1.2rem; }
   .foot a { margin: 0 1rem 0 0; }
 }
+
+/* Contact options */
+.options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.opt { display: flex; flex-direction: column; gap: .3rem; padding: 1.4rem; border-radius: 18px; border: 1px solid rgba(238,242,248,.22); color: var(--deep-ink); text-decoration: none; transition: transform .15s, border-color .15s, background .15s; }
+.opt:hover { transform: translateY(-2px); border-color: rgba(238,242,248,.6); }
+.opt svg { width: 30px; height: 30px; margin-bottom: .6rem; }
+.opt b { font: 650 1.35rem/1.2 var(--display); }
+.opt span { color: var(--deep-muted); font-size: .95rem; }
+.opt-main { background: var(--deep-ink); color: var(--deep); border-color: var(--deep-ink); }
+.opt-main span { color: #4a5a72; }
+@media (max-width: 760px) { .options { grid-template-columns: minmax(0, 1fr); } .opt { flex-direction: row; flex-wrap: wrap; align-items: center; column-gap: .8rem; } .opt svg { margin: 0; width: 26px; height: 26px; } .opt span { flex-basis: 100%; } }

@@ -5,6 +5,8 @@ WA = "4915129529331"
 PORTFOLIO = "https://sayamrina.github.io/"
 LINKEDIN = "https://www.linkedin.com/in/amrina-ali-487025119/"
 GITHUB = "https://github.com/sayamrina"
+# Paste the Google Calendar booking page link here. While empty, "Book a video call" opens WhatsApp with a prefilled request.
+BOOKING = ""
 
 # Work: (key, image). The first two are shown large.
 WORK = ["rmn", "kie", "solution", "erm", "ops", "breakfast", "wunsch", "kpa"]
@@ -112,7 +114,12 @@ T["en"] = dict(
         ("Who owns the result?", "You do: code, content and accounts are handed over."),
     ],
     contact_h="Tell me about your project",
-    contact_p="I reply within one working day.",
+    contact_p="Choose what suits you. I reply within one working day.",
+    opt_call=("Book a video call", "Free, 30 minutes. Pick a time."),
+    opt_wa=("WhatsApp", "Quick questions, quick answers."),
+    opt_mail=("E-mail", "Send details or files."),
+    wa_book="Hi Amrina, I would like to book a free 30-minute video call. Times that suit me:",
+    wa_hello="Hi Amrina, I have a question about a project:",
     contact_mail="Send an e-mail",
     contact_wa="WhatsApp",
     mail_subject="Project enquiry",
@@ -204,7 +211,12 @@ T["de"] = dict(
         ("Wem gehört das Ergebnis?", "Ihnen: Code, Inhalte und Zugänge werden übergeben."),
     ],
     contact_h="Erzählen Sie mir von Ihrem Projekt",
-    contact_p="Ich antworte innerhalb eines Werktags.",
+    contact_p="Wählen Sie, was Ihnen passt. Ich antworte innerhalb eines Werktags.",
+    opt_call=("Videogespräch buchen", "Kostenlos, 30 Minuten. Termin wählen."),
+    opt_wa=("WhatsApp", "Kurze Fragen, schnelle Antworten."),
+    opt_mail=("E-Mail", "Details oder Dateien senden."),
+    wa_book="Hallo Amrina, ich möchte ein kostenloses 30-minütiges Videogespräch buchen. Passende Zeiten:",
+    wa_hello="Hallo Amrina, ich habe eine Frage zu einem Projekt:",
     contact_mail="E-Mail schreiben",
     contact_wa="WhatsApp",
     mail_subject="Projektanfrage",
@@ -296,7 +308,12 @@ T["id"] = dict(
         ("Siapa pemilik hasilnya?", "Anda: kode, isi, dan akun diserahkan kepada Anda."),
     ],
     contact_h="Ceritakan proyek Anda",
-    contact_p="Saya membalas dalam satu hari kerja.",
+    contact_p="Pilih yang paling nyaman. Saya membalas dalam satu hari kerja.",
+    opt_call=("Book video call", "Gratis, 30 menit. Pilih waktunya."),
+    opt_wa=("WhatsApp", "Tanya cepat, dijawab cepat."),
+    opt_mail=("Email", "Kirim detail atau file."),
+    wa_book="Halo Amrina, saya ingin booking video call gratis 30 menit. Waktu yang cocok untuk saya:",
+    wa_hello="Halo Amrina, saya ada pertanyaan soal proyek:",
     contact_mail="Kirim email",
     contact_wa="WhatsApp",
     mail_subject="Pertanyaan proyek",
