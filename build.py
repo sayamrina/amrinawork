@@ -64,6 +64,7 @@ def page(lang):
 
     process = "\n".join(f"<li><h3>{h}</h3><p>{p}</p></li>" for h, p in t["process"])
     about = "\n".join(f"<p>{p}</p>" for p in t["about"])
+    tools = "\n".join(f"<div><dt>{g}</dt><dd>{items}</dd></div>" for g, items in t["tools"])
     faq = "\n".join(
         f"<details><summary>{q}</summary><p>{a}</p></details>" for q, a in t["faq"])
 
@@ -150,7 +151,16 @@ def page(lang):
   </div>
 </section>
 
-<section id="about" class="block block-tint">
+<section id="tools" class="block block-tint">
+  <div class="wrap">
+    <div class="head"><h2>{t['tools_h']}</h2><p>{t['tools_intro']}</p></div>
+    <dl class="tools">
+{tools}
+    </dl>
+  </div>
+</section>
+
+<section id="about" class="block">
   <div class="wrap about">
     <h2>{t['about_h']}</h2>
     <div>
@@ -160,7 +170,7 @@ def page(lang):
   </div>
 </section>
 
-<section id="faq" class="block">
+<section id="faq" class="block block-tint">
   <div class="wrap faq">
     <h2>{t['faq_h']}</h2>
     <div class="faq-list">
