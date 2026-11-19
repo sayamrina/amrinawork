@@ -1,5 +1,6 @@
 """Builds index.html (English), de/index.html and id/index.html from content.py."""
 import re
+import hashlib
 from pathlib import Path
 from urllib.parse import quote
 from content import T, EMAIL, WA, BOOKING, PORTFOLIO, LINKEDIN, GITHUB, WORK, WORK_LINKS, TOOLS, SERVICE_KEYS
@@ -9,13 +10,13 @@ ROOT = Path(__file__).parent
 PATHS = {"en": "", "de": "de/", "id": "id/"}
 SHORT = {"en": "EN", "de": "DE", "id": "ID"}
 NOTAB = ' tabindex="-1"'
-CHECK = '<svg class="ck" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+CHECK = '<svg class="ck" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 
 
 def icon(name):
     svg = (ROOT / "icons" / f"{name}.svg").read_text()
     svg = re.sub(r"<title>.*?</title>", "", svg)
-    return svg.replace('role="img"', 'aria-hidden="true" fill="currentColor"')
+    return svg.replace('role="img"', 'aria-hidden="true" fill="currentColor" width="22" height="22"')
 
 
 def viz(key, v, up):
@@ -23,13 +24,13 @@ def viz(key, v, up):
         return f"""<div class="vz vz-chat">
   <div class="b b-guest">{v['chat_q']}</div>
   <div class="b b-ai">{v['chat_a']}</div>
-  <div class="handover"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="7" r="3.2" fill="currentColor"/><path d="M3.5 17c.8-3.2 3.4-5 6.5-5s5.7 1.8 6.5 5" fill="currentColor"/></svg>{v['chat_handover']}</div>
+  <div class="handover"><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="7" r="3.2" fill="currentColor"/><path d="M3.5 17c.8-3.2 3.4-5 6.5-5s5.7 1.8 6.5 5" fill="currentColor"/></svg>{v['chat_handover']}</div>
 </div>"""
     if key == "auto":
         rows = "".join(f"<li><span>{k}</span><b>{val}</b>{CHECK}</li>" for k, val in v["auto_fields"])
         return f"""<div class="vz vz-auto">
   <div class="mail"><p class="mail-from">{v['auto_from']}</p><p>{v['auto_mail']}</p></div>
-  <svg class="flow" viewBox="0 0 60 24" aria-hidden="true"><path d="M2 12h50m-8-8 8 8-8 8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <svg class="flow" width="54" height="54" viewBox="0 0 60 24" aria-hidden="true"><path d="M2 12h50m-8-8 8 8-8 8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
   <div class="fields"><ul>{rows}</ul><p class="done">{CHECK}{v['auto_done']}</p></div>
 </div>"""
     if key == "web":
@@ -55,7 +56,7 @@ def viz(key, v, up):
         return f"""<div class="vz vz-dash">
   <div class="kpis">{kpis}</div>
   <p class="dash-t">{v['dash_title']}</p>
-  <svg class="bars" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true">{bars}</svg>
+  <svg class="bars" width="300" height="140" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true">{bars}</svg>
 </div>"""
     if key == "learn":
         mods = "".join(
@@ -63,8 +64,11 @@ def viz(key, v, up):
             for n, p in v["learn_mods"])
         return f"""<div class="vz vz-learn">
   <ul class="mods">{mods}</ul>
-  <div class="award"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="20" r="15" fill="currentColor"/><path d="M15 32l-4 12 7-3 4 6 2-14m9-1 4 12-7-3-4 6-2-14" fill="currentColor" opacity=".55"/><path d="M24 11l2.8 5.7 6.2.9-4.5 4.4 1 6.2L24 25.3l-5.5 2.9 1-6.2-4.5-4.4 6.2-.9z" fill="#fff"/></svg><div><b>{v['learn_badge']}</b><span>{v['learn_cert']} PDF</span></div></div>
+  <div class="award"><svg width="64" height="64" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="20" r="15" fill="currentColor"/><path d="M15 32l-4 12 7-3 4 6 2-14m9-1 4 12-7-3-4 6-2-14" fill="currentColor" opacity=".55"/><path d="M24 11l2.8 5.7 6.2.9-4.5 4.4 1 6.2L24 25.3l-5.5 2.9 1-6.2-4.5-4.4 6.2-.9z" fill="#fff"/></svg><div><b>{v['learn_badge']}</b><span>{v['learn_cert']} PDF</span></div></div>
 </div>"""
+
+
+VER = hashlib.md5((ROOT / "style.css").read_bytes() + (ROOT / "main.js").read_bytes()).hexdigest()[:8]
 
 
 def page(lang):
@@ -143,14 +147,14 @@ def page(lang):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,650;12..96,750&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{up}style.css">
+<link rel="stylesheet" href="{up}style.css?v={VER}">
 </head>
 <body data-lang="{lang}">
 <a class="skip" href="#main">{t['skip']}</a>
 
 <header class="top">
   <div class="wrap top-in">
-    <a class="brand" href="#main"><svg class="mark" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><rect x="1" y="1" width="46" height="46" rx="13" fill="#2546d8"/><path d="M8.5 36.5L16.5 11.5 24 31 31.5 11.5 39.5 36.5" fill="none" stroke="#fff" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.6 28h7.4" stroke="#fff" stroke-width="4.2" stroke-linecap="round"/></svg><span>Amrina<small>{t['role']}</small></span></a>
+    <a class="brand" href="#main"><svg class="mark" aria-hidden="true" width="38" height="38" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><rect x="1" y="1" width="46" height="46" rx="13" fill="#2546d8"/><path d="M8.5 36.5L16.5 11.5 24 31 31.5 11.5 39.5 36.5" fill="none" stroke="#fff" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.6 28h7.4" stroke="#fff" stroke-width="4.2" stroke-linecap="round"/></svg><span>Amrina<small>{t['role']}</small></span></a>
     <button class="menu-btn" aria-expanded="false" aria-controls="nav">{t['menu']}</button>
     <nav id="nav" class="nav" aria-label="Main">
       {nav}
@@ -167,8 +171,8 @@ def page(lang):
       <h1>{t['hero_h1']}</h1>
       <p class="lede">{t['hero_lede']}</p>
       <div class="hero-links" role="group" aria-label="{t['hero_links']}">
-        <a class="pill-link" href="{PORTFOLIO}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2" fill="currentColor"/></svg>{t['footer_portfolio']}</a>
-        <a class="pill-link" href="{LINKEDIN}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="4" fill="currentColor"/><path d="M7 10v7M7 7v.01M11 17v-7m0 3.2c0-1.9 1.2-3.2 2.9-3.2 1.6 0 2.6 1.1 2.6 3.1V17" fill="none" stroke="var(--paper)" stroke-width="2.2" stroke-linecap="round"/></svg>LinkedIn</a>
+        <a class="pill-link" href="{PORTFOLIO}" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2" fill="currentColor"/></svg>{t['footer_portfolio']}</a>
+        <a class="pill-link" href="{LINKEDIN}" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="4" fill="currentColor"/><path d="M7 10v7M7 7v.01M11 17v-7m0 3.2c0-1.9 1.2-3.2 2.9-3.2 1.6 0 2.6 1.1 2.6 3.1V17" fill="none" stroke="var(--paper)" stroke-width="2.2" stroke-linecap="round"/></svg>LinkedIn</a>
       </div>
       <p class="lets">{t['lets_talk']}</p>
       <p class="actions"><a class="btn" href="{book}" target="_blank" rel="noopener">{t['cta_primary']}</a> <a class="btn btn-line" href="{wa}" target="_blank" rel="noopener">{t['cta_wa']}</a></p>
@@ -252,9 +256,9 @@ def page(lang):
       <h2>{t['contact_h']}</h2>
       <p>{t['contact_p']}</p>
       <div class="options">
-        <a class="opt opt-main" href="{book}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6" width="13" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 10.5l6-3.5v10l-6-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><b>{t['opt_call'][0]}</b><span>{t['opt_call'][1]}</span></a>
-        <a class="opt" href="{wa}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.1.1.7-.1 1.3Z" fill="currentColor"/></svg><b>{t['opt_wa'][0]}</b><span>{t['opt_wa'][1]}</span></a>
-        <a class="opt" href="{mail}"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 7l8.5 6 8.5-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><b>{t['opt_mail'][0]}</b><span>{t['opt_mail'][1]}</span></a>
+        <a class="opt opt-main" href="{book}" target="_blank" rel="noopener"><svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6" width="13" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 10.5l6-3.5v10l-6-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><b>{t['opt_call'][0]}</b><span>{t['opt_call'][1]}</span></a>
+        <a class="opt" href="{wa}" target="_blank" rel="noopener"><svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.1.1.7-.1 1.3Z" fill="currentColor"/></svg><b>{t['opt_wa'][0]}</b><span>{t['opt_wa'][1]}</span></a>
+        <a class="opt" href="{mail}"><svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 7l8.5 6 8.5-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><b>{t['opt_mail'][0]}</b><span>{t['opt_mail'][1]}</span></a>
       </div>
       <p class="contact-direct"><a href="{mail}">{EMAIL}</a></p>
     </div>
@@ -278,7 +282,7 @@ def page(lang):
   <p class="dlg-note">{t['dlg_note']}</p>
 </dialog>
 
-<script src="{up}main.js"></script>
+<script src="{up}main.js?v={VER}"></script>
 </body>
 </html>
 """
