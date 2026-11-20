@@ -101,7 +101,7 @@ X["de"] = dict(
 )
 
 X["id"] = dict(
-    help_with='Saya bisa bantu Anda dalam:',
+    help_with='Saya bisa membantu Anda dalam:',
     hero_hi='Halo, saya Amrina, AI engineer & educational technology specialist',
     pause='Jeda',
     play='Putar',
