@@ -502,6 +502,7 @@ body:has(.asst:popover-open) .asst-btn { display: none; }
 .offer-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; margin: 0; max-width: 34rem; }
 .tile { display: flex; align-items: center; gap: .55rem; min-height: 48px; padding: .45rem .7rem; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); text-decoration: none; font-weight: 600; font-size: .92rem; line-height: 1.2; transition: border-color .15s, color .15s; }
 .tile:hover { border-color: var(--signal); color: var(--signal); }
+.tile span { min-width: 0; hyphens: auto; }
 .tile .tab-ic { width: 30px; height: 30px; padding: 5px; background: var(--signal-wash); color: var(--signal); }
 .hero .lede { margin-top: 1.4rem; }
 
@@ -548,8 +549,8 @@ html.at-top .asst-btn { visibility: hidden; opacity: 0; translate: 0 20px; }
   .hero { padding-top: 1.6rem; }
   .hero h1 { font-size: 2.15rem; }
   .hi { font-size: .9rem; margin-bottom: .9rem; }
-  .tile { font-size: .84rem; padding: .4rem .5rem; gap: .4rem; }
-  .tile .tab-ic { width: 26px; height: 26px; padding: 4px; }
+  .tile { font-size: .82rem; padding: .4rem .45rem; gap: .35rem; }
+  .tile .tab-ic { flex: none; width: 24px; height: 24px; padding: 3px; }
   .hero-copy .actions .btn { flex: 1 1 auto; }
   .chat { padding: 1rem; }
   .cases { grid-template-columns: 1fr; }
