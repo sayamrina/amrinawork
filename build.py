@@ -51,11 +51,11 @@ def page(lang):
     dlg_others = "".join(f'<p lang="{l}">{T[l]["dlg_title"]}</p>' for l in T if l != lang)
 
     tabs = "\n".join(
-        f'<button role="tab" id="tab-{k}" aria-controls="panel-{k}" aria-selected="{"true" if i == 0 else "false"}"'
+        f'<button type="button" role="tab" id="tab-{k}" data-panel="panel-{k}" aria-selected="{"true" if i == 0 else "false"}"'
         f'{"" if i == 0 else NOTAB}>{tab_icon(k)}<span>{name}</span><i class="prog" aria-hidden="true"></i></button>'
         for i, (k, (name, _)) in enumerate(zip(SERVICE_KEYS, t["services"])))
     panels = "\n".join(
-        f"""<div class="panel{" run" if i == 0 else ""}" role="tabpanel" id="panel-{k}" aria-labelledby="tab-{k}"{"" if i == 0 else " hidden"}>
+        f"""<div class="panel" role="tabpanel" id="panel-{k}" aria-labelledby="tab-{k}"{" tabindex=\"0\"" if i == 0 else " hidden"}>
   <p class="panel-line"><b>{name}.</b> {line}</p>
   {viz(k, v, up)}
   <p class="panel-cap">{v['example'] if k == 'dash' else v['illustration']}</p>
@@ -224,8 +224,11 @@ def page(lang):
   <div class="wrap">
     <h2>{t['services_h']}</h2>
     <div class="bench">
-      <div class="tabs" role="tablist" aria-label="{t['services_h']}">
+      <div class="tabs-col">
+        <div class="tabs" role="tablist" aria-label="{t['services_h']}">
 {tabs}
+        </div>
+        <button type="button" class="autoplay-btn" data-pause="{t['pause']}" data-play="{t['play']}">{t['pause']}</button>
       </div>
       <div class="stage">
 {panels}
@@ -344,17 +347,17 @@ def page(lang):
   </div>
 </footer>
 
-<button class="asst-btn" type="button" aria-expanded="false" aria-controls="asst"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-5 4v-4H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M8 10h8M8 13h5"/></svg><span>{t['asst_btn']}</span></button>
-<section id="asst" class="asst" role="dialog" aria-modal="false" aria-labelledby="asst-title" hidden>
-  <header class="asst-head"><span class="asst-av" aria-hidden="true">{mark_small}</span><div><h2 id="asst-title">{t['asst_title']}</h2><p>{t['asst_note']}</p></div><button type="button" class="asst-x" aria-label="{t['asst_close']}">×</button></header>
+<button class="asst-btn" type="button" popovertarget="asst"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-5 4v-4H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M8 10h8M8 13h5"/></svg><span>{t['asst_btn']}</span></button>
+<dialog id="asst" class="asst" popover aria-labelledby="asst-title">
+  <header class="asst-head"><span class="asst-av" aria-hidden="true">{mark_small}</span><div><h2 id="asst-title">{t['asst_title']}</h2><p>{t['asst_note']}</p></div><button type="button" class="asst-x" popovertarget="asst" popovertargetaction="hide" aria-label="{t['asst_close']}">×</button></header>
   <div class="asst-log" aria-live="polite"><div class="m m-ai">{t['asst_hello']}</div></div>
   <div class="asst-chips">{chips}</div>
   <form class="asst-form"><label class="sr" for="asst-in">{t['asst_ph']}</label><input id="asst-in" type="text" autocomplete="off" placeholder="{t['asst_ph']}" maxlength="200"><button type="submit">{t['asst_send']}</button></form>
-</section>
+</dialog>
 <script type="application/json" id="kb">{kb_json}</script>
 <script type="application/json" id="asst-cfg">{asst_cfg}</script>
 
-<dialog id="lang-dialog" class="dlg" aria-labelledby="dlg-title">
+<dialog id="lang-dialog" class="dlg" closedby="none" aria-labelledby="dlg-title">
   <h2 id="dlg-title">{t['dlg_title']}</h2>
   <div class="dlg-others">{dlg_others}</div>
   <div class="dlg-langs">

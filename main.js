@@ -23,6 +23,13 @@
   // Services tabs (ARIA tabs pattern) with autoplay and replayed mock-up animations
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var bench = document.querySelector(".bench");
+  var autoBtn = document.querySelector(".autoplay-btn");
+  // Visible pause/play control for the rotating tabs (WCAG 2.2.2 Pause, Stop, Hide)
+  function setAuto(on) {
+    if (!bench) return;
+    bench.classList.toggle("auto", on);
+    if (autoBtn) autoBtn.textContent = on ? autoBtn.dataset.pause : autoBtn.dataset.play;
+  }
   var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
   function countUp(panel) {
     panel.querySelectorAll(".count").forEach(function (el) {
@@ -40,14 +47,17 @@
   }
   function select(tab, byUser) {
     tabs.forEach(function (t) {
-      var on = t === tab, panel = document.getElementById(t.getAttribute("aria-controls"));
+      var on = t === tab, panel = document.getElementById(t.dataset.panel);
       t.setAttribute("aria-selected", on);
       t.tabIndex = on ? 0 : -1;
       panel.hidden = !on;
+      if (on) panel.setAttribute("tabindex", "0"); else panel.removeAttribute("tabindex");
       panel.classList.remove("run");
-      if (on) { void panel.offsetWidth; panel.classList.add("run"); countUp(panel); }
+      // animations are opt-in: with reduced motion the panel simply shows its final state
+      if (on && !reduceMotion) { void panel.offsetWidth; panel.classList.add("run"); }
+      if (on) countUp(panel);
     });
-    if (byUser && bench) { bench.classList.remove("auto"); bench.dataset.touched = "1"; }
+    if (byUser && bench) { bench.dataset.touched = "1"; setAuto(false); }
   }
   tabs.forEach(function (t, i) {
     t.addEventListener("click", function () { select(t, true); t.scrollIntoView({ block: "nearest", inline: "nearest" }); });
@@ -63,17 +73,23 @@
       select(tabs[(i + 1) % tabs.length], false);
     });
   });
+  if (autoBtn && (reduceMotion || !("IntersectionObserver" in window))) autoBtn.hidden = true;
   if (bench && !reduceMotion && "IntersectionObserver" in window) {
     var started = false;
     new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
         if (en.isIntersecting && !started) {
           started = true;
-          if (!bench.dataset.touched) { bench.classList.add("auto"); select(tabs[0], false); }
+          if (!bench.dataset.touched) { setAuto(true); select(tabs[0], false); }
         }
         bench.classList.toggle("paused", !en.isIntersecting);
       });
     }, { threshold: 0.35 }).observe(bench);
+    autoBtn.addEventListener("click", function () {
+      var on = !bench.classList.contains("auto");
+      setAuto(on);
+      if (on) select(tabs.filter(function (t) { return t.getAttribute("aria-selected") === "true"; })[0], false);
+    });
     bench.addEventListener("mouseenter", function () { bench.classList.add("paused"); });
     bench.addEventListener("mouseleave", function () { bench.classList.remove("paused"); });
   }
@@ -90,7 +106,7 @@
         var show = cat === "all" || c.dataset.cats.split(" ").indexOf(cat) > -1;
         c.hidden = !show;
         c.classList.remove("enter");
-        if (show) { void c.offsetWidth; c.classList.add("enter"); }
+        if (show && !reduceMotion) { void c.offsetWidth; c.classList.add("enter"); }
       });
     });
   });
@@ -176,7 +192,7 @@
         if (e) {
           t.innerHTML = esc(e.a) + (e.src ? '<br><a class="m-src" href="' + e.href + '">' + esc(cfg.src) + ": " + esc(e.src) + "</a>" : "");
           var link = t.querySelector(".m-src");
-          if (link && window.innerWidth < 640) link.addEventListener("click", close);
+          if (link && window.innerWidth < 640) link.addEventListener("click", function () { asst.hidePopover(); });
         } else {
           t.innerHTML = esc(cfg.none) + '<div class="m-act"><a href="' + cfg.waHref + encodeURIComponent(cfg.waText + q) +
             '" target="_blank" rel="noopener">' + esc(cfg.wa) + '</a><a href="' + cfg.bookHref + '" target="_blank" rel="noopener">' + esc(cfg.book) + "</a></div>";
@@ -184,11 +200,7 @@
         log.scrollTop = log.scrollHeight;
       }, reduceMotion ? 0 : 650);
     }
-    function open() { asst.hidden = false; abtn.setAttribute("aria-expanded", "true"); input.focus(); }
-    function close() { asst.hidden = true; abtn.setAttribute("aria-expanded", "false"); abtn.focus(); }
-    abtn.addEventListener("click", open);
-    asst.querySelector(".asst-x").addEventListener("click", close);
-    asst.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+    asst.addEventListener("toggle", function (e) { if (e.newState === "open") input.focus(); });
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var q = input.value.trim(); if (!q) return;

@@ -3,6 +3,8 @@
 X = {}
 
 X["en"] = dict(
+    pause='Pause',
+    play='Play',
     legal_imp='Legal notice',
     legal_priv='Privacy',
     nav_offers="Offers",
@@ -48,6 +50,8 @@ X["en"] = dict(
 )
 
 X["de"] = dict(
+    pause='Pause',
+    play='Abspielen',
     legal_imp='Impressum',
     legal_priv='Datenschutz',
     nav_offers="Angebote",
@@ -93,6 +97,8 @@ X["de"] = dict(
 )
 
 X["id"] = dict(
+    pause='Jeda',
+    play='Putar',
     legal_imp='Impressum',
     legal_priv='Kebijakan privasi',
     nav_offers="Penawaran",
