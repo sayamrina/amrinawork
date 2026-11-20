@@ -136,6 +136,16 @@ def page(lang):
     kb.append(dict(id="calc", q=t["calc_h"], a=f"{t['calc_h']} {t['calc_p']} {t['calc_note']}", src=t["calc_h"], href="#savings"))
     for e in kb:
         e["k"] = KB_WORDS.get(e["id"], "")
+    ldjson = json.dumps({
+        "@context": "https://schema.org", "@type": "ProfessionalService", "name": "Amrina, AI engineer",
+        "url": BASE + PATHS[lang], "image": BASE + "img/amrina.webp", "description": t["description"],
+        "email": EMAIL, "telephone": "+4915129529331", "inLanguage": lang,
+        "address": {"@type": "PostalAddress", "addressLocality": "Saarbrücken", "addressCountry": "DE"},
+        "areaServed": ["DE", "ID", "Worldwide"],
+        "founder": {"@type": "Person", "name": "Amrina", "jobTitle": "AI engineer and educational technology specialist",
+                    "alumniOf": "Saarland University", "sameAs": [PORTFOLIO, LINKEDIN, GITHUB]},
+        "knowsLanguage": ["en", "de", "id"],
+    }, ensure_ascii=False).replace("</", "<\\/")
     kb_json = json.dumps(kb, ensure_ascii=False).replace("</", "<\\/")
     asst_cfg = json.dumps(dict(none=t["asst_none"], src=t["asst_src"], wa=t["asst_wa"], book=t["asst_book"],
                                waHref=f"https://wa.me/{WA}?text=", waText=t["asst_wa_text"], bookHref=book), ensure_ascii=False).replace("</", "<\\/")
@@ -167,6 +177,7 @@ def page(lang):
 <meta name="theme-color" content="#f4f6f7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0f1519" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="{up}favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{ldjson}</script>
 <link rel="stylesheet" href="{up}fonts.css?v={VER}">
 <link rel="stylesheet" href="{up}style.css?v={VER}">
 </head>

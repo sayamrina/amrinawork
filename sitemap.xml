@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://sayamrina.github.io/amrinawork/</loc></url>
-<url><loc>https://sayamrina.github.io/amrinawork/de/</loc></url>
-<url><loc>https://sayamrina.github.io/amrinawork/id/</loc></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://sayamrina.github.io/amrinawork/</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sayamrina.github.io/amrinawork/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://sayamrina.github.io/amrinawork/de/"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://sayamrina.github.io/amrinawork/id/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sayamrina.github.io/amrinawork/"/>
+  </url>
+  <url>
+    <loc>https://sayamrina.github.io/amrinawork/de/</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sayamrina.github.io/amrinawork/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://sayamrina.github.io/amrinawork/de/"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://sayamrina.github.io/amrinawork/id/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sayamrina.github.io/amrinawork/"/>
+  </url>
+  <url>
+    <loc>https://sayamrina.github.io/amrinawork/id/</loc>
+    <lastmod>2026-11-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sayamrina.github.io/amrinawork/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://sayamrina.github.io/amrinawork/de/"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://sayamrina.github.io/amrinawork/id/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sayamrina.github.io/amrinawork/"/>
+  </url>
 </urlset>
