@@ -498,7 +498,8 @@ body:has(.asst:popover-open) .asst-btn { display: none; }
 /* Hero: who and what, visible in the first screen */
 .hi { display: flex; align-items: center; gap: .7rem; margin: 0 0 1.2rem; color: var(--muted); font-weight: 500; font-size: 1rem; }
 .hi img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex: none; box-shadow: 0 0 0 2px var(--surface), 0 0 0 3px var(--line); }
-.offer-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; margin: 1.6rem 0 0; max-width: 34rem; }
+.help-with { margin: 1.5rem 0 .6rem; font-weight: 600; font-size: 1.05rem; color: var(--ink); }
+.offer-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; margin: 0; max-width: 34rem; }
 .tile { display: flex; align-items: center; gap: .55rem; min-height: 48px; padding: .45rem .7rem; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); text-decoration: none; font-weight: 600; font-size: .92rem; line-height: 1.2; transition: border-color .15s, color .15s; }
 .tile:hover { border-color: var(--signal); color: var(--signal); }
 .tile .tab-ic { width: 30px; height: 30px; padding: 5px; background: var(--signal-wash); color: var(--signal); }

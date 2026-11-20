@@ -207,7 +207,8 @@ def page(lang):
     <div class="hero-copy">
       <p class="hi"><img src="{up}img/amrina.webp" alt="" width="40" height="40">{t['hero_hi']}</p>
       <h1>{t['hero_h1']}</h1>
-      <nav class="offer-tiles" aria-label="{t['services_h']}">{offer_tiles}</nav>
+      <p class="help-with" id="help-with">{t['help_with']}</p>
+      <nav class="offer-tiles" aria-labelledby="help-with">{offer_tiles}</nav>
       <p class="lede">{t['hero_lede']}</p>
       <div class="hero-links" role="group" aria-label="{t['hero_links']}">
         <a class="pill-link" href="{PORTFOLIO}" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2" fill="currentColor"/></svg>{t['footer_portfolio']}</a>
