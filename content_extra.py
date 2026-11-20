@@ -3,6 +3,7 @@
 X = {}
 
 X["en"] = dict(
+    hero_hi="Hi, I'm Amrina, AI engineer & educational technology specialist",
     pause='Pause',
     play='Play',
     legal_imp='Legal notice',
@@ -50,6 +51,7 @@ X["en"] = dict(
 )
 
 X["de"] = dict(
+    hero_hi='Hallo, ich bin Amrina, AI Engineer & Spezialist für Bildungstechnologie',
     pause='Pause',
     play='Abspielen',
     legal_imp='Impressum',
@@ -97,6 +99,7 @@ X["de"] = dict(
 )
 
 X["id"] = dict(
+    hero_hi='Halo, saya Amrina, AI engineer & educational technology specialist',
     pause='Jeda',
     play='Putar',
     legal_imp='Impressum',

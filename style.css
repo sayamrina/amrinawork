@@ -495,6 +495,28 @@ body:has(.asst:popover-open) .asst-btn { display: none; }
 .legal-back { margin-left: auto; font-weight: 600; }
 .legal-page .foot a { margin-left: 1rem; }
 
+/* Hero: who and what, visible in the first screen */
+.hi { display: flex; align-items: center; gap: .7rem; margin: 0 0 1.2rem; color: var(--muted); font-weight: 500; font-size: 1rem; }
+.hi img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex: none; box-shadow: 0 0 0 2px var(--surface), 0 0 0 3px var(--line); }
+.offer-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; margin: 1.6rem 0 0; max-width: 34rem; }
+.tile { display: flex; align-items: center; gap: .55rem; min-height: 48px; padding: .45rem .7rem; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); text-decoration: none; font-weight: 600; font-size: .92rem; line-height: 1.2; transition: border-color .15s, color .15s; }
+.tile:hover { border-color: var(--signal); color: var(--signal); }
+.tile .tab-ic { width: 30px; height: 30px; padding: 5px; background: var(--signal-wash); color: var(--signal); }
+.hero .lede { margin-top: 1.4rem; }
+
+/* Assistant launcher appears once the visitor scrolls (scroll-state query, IntersectionObserver fallback) */
+.asst-btn { transition: visibility .3s, opacity .3s ease, translate .3s ease; }
+html.at-top .asst-btn { visibility: hidden; opacity: 0; translate: 0 20px; }
+@supports (container-type: scroll-state) {
+  html { container-type: scroll-state; }
+  .asst-btn { visibility: hidden; opacity: 0; translate: 0 20px; }
+  @container scroll-state(scrollable: top) {
+    .asst-btn { visibility: visible; opacity: 1; translate: 0 0; }
+  }
+}
+.asst-btn:focus-visible { visibility: visible; opacity: 1; translate: 0 0; }
+.scroll-sentinel { position: absolute; top: 0; height: 1px; width: 1px; visibility: hidden; }
+
 /* Responsive */
 @media (max-width: 1000px) {
   .bench { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
@@ -522,6 +544,11 @@ body:has(.asst:popover-open) .asst-btn { display: none; }
 }
 @media (max-width: 640px) {
   .brand small { display: none; }
+  .hero { padding-top: 1.6rem; }
+  .hero h1 { font-size: 2.15rem; }
+  .hi { font-size: .9rem; margin-bottom: .9rem; }
+  .tile { font-size: .84rem; padding: .4rem .5rem; gap: .4rem; }
+  .tile .tab-ic { width: 26px; height: 26px; padding: 4px; }
   .hero-copy .actions .btn { flex: 1 1 auto; }
   .chat { padding: 1rem; }
   .cases { grid-template-columns: 1fr; }

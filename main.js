@@ -94,6 +94,21 @@
     bench.addEventListener("mouseleave", function () { bench.classList.remove("paused"); });
   }
 
+  // Hero service tiles open the matching tab
+  document.querySelectorAll(".tile").forEach(function (a) {
+    a.addEventListener("click", function () {
+      var tab = document.getElementById("tab-" + a.dataset.tab);
+      if (tab) select(tab, true);
+    });
+  });
+
+  // Fallback for the scroll-aware assistant launcher
+  if (!(window.CSS && CSS.supports("container-type", "scroll-state")) && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (en) {
+      document.documentElement.classList.toggle("at-top", en[0].isIntersecting);
+    }).observe(document.querySelector(".scroll-sentinel"));
+  }
+
   // Work filter
   var fbtns = Array.prototype.slice.call(document.querySelectorAll(".filters button"));
   var cases = Array.prototype.slice.call(document.querySelectorAll(".case"));

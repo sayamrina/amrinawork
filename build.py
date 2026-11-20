@@ -152,6 +152,10 @@ def page(lang):
     mark_small = open(ROOT / 'logo' / 'mark.svg').read().strip().replace('<svg ', '<svg width="30" height="30" ', 1)
     chips = "".join(f'<button type="button" class="chip">{c}</button>' for c in t["asst_chips"])
 
+    offer_tiles = "".join(
+        f'<a class="tile" href="#services" data-tab="{k}">{tab_icon(k)}<span>{name}</span></a>'
+        for k, (name, _) in zip(SERVICE_KEYS, t["services"]))
+    # sentinel for the scroll-aware assistant launcher (fallback when scroll-state queries are unsupported)
     process = "\n".join(f"<li><b>{h}</b><span>{p}</span></li>" for h, p in t["process"])
     tools = "\n".join(
         f"""<div class="tg"><h3>{g}</h3><ul>{''.join(
@@ -182,6 +186,7 @@ def page(lang):
 <link rel="stylesheet" href="{up}style.css?v={VER}">
 </head>
 <body data-lang="{lang}">
+<div class="scroll-sentinel" aria-hidden="true"></div>
 <a class="skip" href="#main">{t['skip']}</a>
 
 <header class="top">
@@ -200,7 +205,9 @@ def page(lang):
 <section class="hero">
   <div class="wrap hero-in">
     <div class="hero-copy">
+      <p class="hi"><img src="{up}img/amrina.webp" alt="" width="40" height="40">{t['hero_hi']}</p>
       <h1>{t['hero_h1']}</h1>
+      <nav class="offer-tiles" aria-label="{t['services_h']}">{offer_tiles}</nav>
       <p class="lede">{t['hero_lede']}</p>
       <div class="hero-links" role="group" aria-label="{t['hero_links']}">
         <a class="pill-link" href="{PORTFOLIO}" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2" fill="currentColor"/></svg>{t['footer_portfolio']}</a>
@@ -208,7 +215,6 @@ def page(lang):
       </div>
       <p class="lets">{t['lets_talk']}</p>
       <p class="actions"><a class="btn" href="{book}" target="_blank" rel="noopener">{t['cta_primary']}</a> <a class="btn btn-line" href="{wa}" target="_blank" rel="noopener">{t['cta_wa']}</a></p>
-      <p class="me"><img src="{up}img/amrina.webp" alt="Amrina" width="44" height="44">{t['hero_me']}</p>
     </div>
     <figure class="chat" aria-label="{t['chat_label']}">
       <figcaption>{t['chat_label']}</figcaption>
